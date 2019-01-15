@@ -1,2 +1,8 @@
-inst/doc
 .Rproj.user
+.Rhistory
+.RData
+inst/doc
+GenomicRanges
+IRanges
+S4Vectors
+XVector
