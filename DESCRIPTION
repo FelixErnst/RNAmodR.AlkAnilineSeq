@@ -1,0 +1,22 @@
+Package: RNAmodR.AlkAnilineSeq
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "First",
+           family = "Last",
+           role = c("aut", "cre"),
+           email = "first.last@example.com")
+Description: What the package does (one paragraph).
+License: What license it uses
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 6.1.1
+Collate: 
+    'RNAmodR.AlkAnilineSeq.R'
+    'Modifier-AlkAnilineSeq-class.R'
+    'Modifier-AlkAnilineSeq-viz.R'
