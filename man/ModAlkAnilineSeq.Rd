@@ -15,6 +15,8 @@
 \alias{visualizeData}
 \alias{visualizeDataByCoord,ModAlkAnilineSeq,GRanges-method}
 \alias{visualizeData,ModAlkAnilineSeq-method}
+\alias{visualizeDataByCoord,ModSetAlkAnilineSeq,GRanges-method}
+\alias{visualizeData,ModSetAlkAnilineSeq-method}
 \title{ModAlkAnilineSeq}
 \usage{
 \S4method{settings}{ModAlkAnilineSeq}(x) <- value
@@ -38,6 +40,12 @@ ModSetAlkAnilineSeq(x, fasta = NA, gff = NA)
 
 \S4method{visualizeData}{ModAlkAnilineSeq}(x, name, from = 1L,
   to = 30L, type = c("ends", "scoreNC", "scoreSR"), ...)
+
+\S4method{visualizeDataByCoord}{ModSetAlkAnilineSeq,GRanges}(x, coord,
+  type = c("scoreNC", "scoreSR", "ends"), window.size = 15L, ...)
+
+\S4method{visualizeData}{ModSetAlkAnilineSeq}(x, name, from = 1L,
+  to = 30L, type = c("scoreNC", "scoreSR", "ends"), ...)
 }
 \arguments{
 \item{...}{Optional arguments overwriting default values, which are

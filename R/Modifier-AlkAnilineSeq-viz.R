@@ -80,7 +80,10 @@ setMethod(
     n <- ncol(mcols(data))
     colour <- args[["colour"]]
     if(is.na(colour) || length(colour) != n){
-      colour <- RNAMODR_AAS_PLOT_DATA_COLOURS
+      colour <- RNAMODR_AAS_PLOT_DATA_COLOURS[seq.int(1,n)]
+    }
+    if(is.null(names(colour))){
+      names(colour) <- colnames(mcols(data))
     }
     dts <- lapply(seq_len(n),
                   function(i){
@@ -92,17 +95,61 @@ setMethod(
                                           name = name,
                                           fill = colour,
                                           col = colour,
-                                          type = "h")
+                                          type = "histogram")
                     if(column %in% c("scoreSR")){
-                      Gviz::displayPars(dt)$ylim = c(0,1)
+                      Gviz::displayPars(dt)$ylim <- c(0,1)
+                    } else if(!is.null(args[["ylim"]])){
+                      Gviz::displayPars(dt)$ylim <- args[["ylim"]]
                     }
-                    Gviz::displayPars(dt)$lwd <- 3L
                     Gviz::displayPars(dt)$background.title <- "#FFFFFF"
                     Gviz::displayPars(dt)$fontcolor.title <- "#000000"
                     Gviz::displayPars(dt)$col.axis <- "#000000"
+                    if(!is.null(args[["data.track.pars"]])){
+                      Gviz::displayPars(dt) <- args[["data.track.pars"]]
+                    }
                     dt
                   })
     names(dts) <- colnames(mcols(data))
     dts
+  }
+)
+
+#' @rdname ModAlkAnilineSeq
+#' @export
+setMethod(
+  f = "visualizeDataByCoord",
+  signature = signature(x = "ModSetAlkAnilineSeq",
+                        coord = "GRanges"),
+  definition = function(x,
+                        coord,
+                        type = c("scoreNC","scoreSR","ends"),
+                        window.size = 15L,
+                        ...) {
+    type <- match.arg(type,c("scoreNC","scoreSR","ends"))
+    callNextMethod(x = x,
+                   coord = coord,
+                   type = type,
+                   window.size = window.size,
+                   ...)
+  }
+)
+#' @rdname ModAlkAnilineSeq
+#' @export
+setMethod(
+  f = "visualizeData",
+  signature = signature(x = "ModSetAlkAnilineSeq"),
+  definition = function(x,
+                        name,
+                        from,
+                        to,
+                        type = c("scoreNC","scoreSR","ends"),
+                        ...) {
+    type <- match.arg(type,c("scoreNC","scoreSR","ends"))
+    callNextMethod(x = x,
+                   name,
+                   from,
+                   to,
+                   type = type,
+                   ...)
   }
 )
