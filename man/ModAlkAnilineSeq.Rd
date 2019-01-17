@@ -12,6 +12,7 @@
 \alias{modify,ModAlkAnilineSeq-method}
 \alias{ModSetAlkAnilineSeq-class}
 \alias{ModSetAlkAnilineSeq}
+\alias{visualizeData}
 \alias{visualizeDataByCoord,ModAlkAnilineSeq,GRanges-method}
 \alias{visualizeData,ModAlkAnilineSeq-method}
 \title{ModAlkAnilineSeq}
@@ -33,10 +34,10 @@
 ModSetAlkAnilineSeq(x, fasta = NA, gff = NA)
 
 \S4method{visualizeDataByCoord}{ModAlkAnilineSeq,GRanges}(x, coord,
-  type = c("ends", "score"), window.size = 15L, ...)
+  type = c("ends", "scoreNC", "scoreSR"), window.size = 15L, ...)
 
 \S4method{visualizeData}{ModAlkAnilineSeq}(x, name, from = 1L,
-  to = 30L, type = c("ends", "score"), ...)
+  to = 30L, type = c("ends", "scoreNC", "scoreSR"), ...)
 }
 \arguments{
 \item{...}{Optional arguments overwriting default values, which are
@@ -57,4 +58,13 @@ This is argument is passed on to \code{\link{ProtectedEndSequenceData}}
 }
 \description{
 title
+}
+\details{
+\code{ModAlkAnilineSeq} specific arguments for \link{visualizeData}:
+\itemize{
+
+}
+}
+\author{
+Felix G.M. Ernst \email{felix.gm.ernst@outlook.com}
 }

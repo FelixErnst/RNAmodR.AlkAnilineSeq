@@ -4,6 +4,8 @@ NULL
 #' @name ModAlkAnilineSeq
 #' @aliases AlkAnilineSeq ModAlkAnilineSeq
 #' 
+#' @author Felix G.M. Ernst \email{felix.gm.ernst@@outlook.com}
+#' 
 #' @title ModAlkAnilineSeq
 #' @description 
 #' title
@@ -55,10 +57,20 @@ setMethod(
 
 .norm_aas_args <- function(input){
   maxLength <- NA # for all scores
+  minLength <- 9L # for all scores
   minSignal <- 10L # for all scores
-  minScoreNC <- 40L # for score normalized cleavage
-  minScoreSR <- 0.40 # for score stop ratio
+  minScoreNC <- 50L # for score normalized cleavage
+  minScoreSR <- 0.50 # for score stop ratio
   scoreOperator <- "&"
+  if(!is.null(input[["minLength"]])){
+    minLength <- input[["minLength"]]
+    if(!is.integer(minLength) | minLength < 1L){
+      if(!is.na(minLength)){
+        stop("'minQuality' must be integer with a value higher than 0.",
+             call. = FALSE)
+      }
+    }
+  }
   if(!is.null(input[["minSignal"]])){
     minSignal <- input[["minSignal"]]
     if(!is.integer(minSignal) | minSignal < 1L){
@@ -90,6 +102,7 @@ setMethod(
   args <- RNAmodR:::.norm_args(input)
   args <- c(args,
             list(maxLength = maxLength,
+                 minLength = minLength,
                  minSignal = minSignal,
                  minScoreNC = minScoreNC,
                  minScoreSR = minScoreSR,
@@ -186,6 +199,15 @@ setMethod("ModAlkAnilineSeq",
   # get the means. the sds arecurrently disregarded for this analysis
   mod <- aggregate(seqData(x),
                    condition = "Treated")
+  # shift each result one position upstream, since the signal has an N+1 offset
+  offsetAdd <- S4Vectors::DataFrame(as.list(rep(0,ncol(mod@unlistData))))
+  colnames(offsetAdd) <- colnames(mod@unlistData)
+  mod <- IRanges::SplitDataFrameList(lapply(mod,
+                                            function(m){
+                                              m <- m[seq.int(2L,nrow(m)),]
+                                              rbind(m,offsetAdd)
+                                            }))
+  # subset to columns needed
   data <- mod@unlistData[,c("means.ends",
                             "means.tx",
                             "means.ol")]
@@ -221,7 +243,6 @@ setMethod(
 
 .find_aas <- function(x){
   message("Searching for m7G/m3C/D ...")
-  browser()
   #
   letters <- IRanges::CharacterList(strsplit(as.character(sequences(x)),""))
   ranges <- ranges(x)
@@ -240,12 +261,13 @@ setMethod(
   # find modifications
   modifications <- mapply(
     function(m,l,r,s){
-      rownames(m) <- seq_len(BiocGenerics::width(r)) - 1
+      rownames(m) <- seq_len(BiocGenerics::width(r))
       m <- m[!is.na(m$scoreNC) &
                !is.na(m$scoreSR) &
                !is.na(m$ends),]
       if(nrow(m) == 0L) return(NULL)
-      m <- m[m$ends >= minSignal & rownames(m) != 0L,]
+      m <- m[s,]
+      if(nrow(m) == 0L) return(NULL)
       m <- m[mapply(Reduce,
                     rep(scoreOperator,nrow(m)),
                     m$scoreNC >= minScoreNC,
@@ -253,21 +275,21 @@ setMethod(
       if(nrow(m) == 0L) return(NULL)
       ansm7G <- RNAmodR:::.constructModRanges(
         r,
-        m[l[as.integer(rownames(m))] == "G"],
+        m[l[as.integer(rownames(m))] == "G",],
         modType = "m7G",
         scoreFun = RNAmodR.AlkAnilineSeq:::.get_aas_scores,
         source = "RNAmodR.AlkAnilineSeq",
         type = "RNAMOD")
       ansD <- RNAmodR:::.constructModRanges(
         r,
-        m[l[rownames(m)] == "U"],
+        m[l[as.integer(rownames(m))] == "U",],
         modType = "D",
         scoreFun = RNAmodR.AlkAnilineSeq:::.get_aas_scores,
         source = "RNAmodR.AlkAnilineSeq",
         type = "RNAMOD")
       ansm3C <- RNAmodR:::.constructModRanges(
         r,
-        m[l[rownames(m)] == "C"],
+        m[l[as.integer(rownames(m))] == "C",],
         modType = "m3C",
         scoreFun = RNAmodR.AlkAnilineSeq:::.get_aas_scores,
         source = "RNAmodR.AlkAnilineSeq",

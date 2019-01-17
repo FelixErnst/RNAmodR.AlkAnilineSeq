@@ -3,13 +3,17 @@
 NULL
 
 RNAMODR_AAS_PLOT_DATA <- c("ends",
-                           "score")
+                           "scoreNC",
+                           "scoreSR")
 RNAMODR_AAS_PLOT_DATA_NAMES <- c(ends = "5'-ends",
-                                 score = "Score AlkAnilineSeq")
+                                 scoreNC = "Normalized Cleavage",
+                                 scoreSR = "Stop ratio")
 RNAMODR_AAS_PLOT_DATA_COLOURS <- c(ends = "#FBB4AE",
-                                   score = "#DECBE4")
+                                   scoreNC = "#DECBE4",
+                                   scoreSR = "#CCEBC5")
 #' @rdname ModAlkAnilineSeq
 #' 
+#' @name visualizeData
 #' @details 
 #' \code{ModAlkAnilineSeq} specific arguments for \link{visualizeData}:
 #' \itemize{
@@ -25,7 +29,7 @@ setMethod(
                         coord = "GRanges"),
   definition = function(x,
                         coord,
-                        type = c("ends","score"),
+                        type = c("ends","scoreNC","scoreSR"),
                         window.size = 15L,
                         ...) {
     if(missing(type)){
@@ -47,7 +51,7 @@ setMethod(
                         name,
                         from,
                         to,
-                        type = c("ends","score"),
+                        type = c("ends","scoreNC","scoreSR"),
                         ...) {
     browser()
     if(missing(type)){
@@ -73,8 +77,6 @@ setMethod(
                         seqdata,
                         sequence,
                         args) {
-    requireNamespace("Gviz")
-    browser()
     n <- ncol(mcols(data))
     colour <- args[["colour"]]
     if(is.na(colour) || length(colour) != n){
@@ -85,17 +87,19 @@ setMethod(
                     column <- colnames(mcols(data)[i])
                     colour <- colour[column]
                     name <- RNAMODR_AAS_PLOT_DATA_NAMES[column]
-                    dt <- DataTrack(data,
-                              data = column,
-                              name = name,
-                              fill = colour,
-                              type = "histogram")
-                    if(column %in% c("score")){
-                      displayPars(dt)$ylim = c(0,1)
+                    dt <- Gviz::DataTrack(data,
+                                          data = column,
+                                          name = name,
+                                          fill = colour,
+                                          col = colour,
+                                          type = "h")
+                    if(column %in% c("scoreSR")){
+                      Gviz::displayPars(dt)$ylim = c(0,1)
                     }
-                    displayPars(dt)$background.title <- "#FFFFFF"
-                    displayPars(dt)$fontcolor.title <- "#000000"
-                    displayPars(dt)$col.axis <- "#000000"
+                    Gviz::displayPars(dt)$lwd <- 3L
+                    Gviz::displayPars(dt)$background.title <- "#FFFFFF"
+                    Gviz::displayPars(dt)$fontcolor.title <- "#000000"
+                    Gviz::displayPars(dt)$col.axis <- "#000000"
                     dt
                   })
     names(dts) <- colnames(mcols(data))
