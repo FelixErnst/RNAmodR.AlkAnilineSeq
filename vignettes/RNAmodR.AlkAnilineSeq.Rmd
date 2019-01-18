@@ -3,14 +3,14 @@ title: 'RNAmodR: AlkAnilineSeq'
 author: "Felix G.M. Ernst"
 date: "`r Sys.Date()`"
 abstract: >
-  Example of AlkAnilineSeq analysis
+  detection of m7G, m3C and D modification by AlkAnilineSeq
 output:
   BiocStyle::html_document:
     toc: true
     toc_float: true
     df_print: paged
 vignette: >
-  %\VignetteIndexEntry{RNAmodR - AlkAnilineSeq}
+  %\VignetteIndexEntry{RNAmodR.AlkAnilineSeq}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib

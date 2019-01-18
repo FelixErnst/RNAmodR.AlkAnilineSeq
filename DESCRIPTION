@@ -1,12 +1,16 @@
 Package: RNAmodR.AlkAnilineSeq
-Title: RNAmodR: analysis of AlkAnilineSeq data
-Version: 0.0.0.9000
-Authors@R: 
-    person(given = "Felix G.M.",
-           family = "Ernst",
-           role = c("aut", "cre"),
-           email = "felix.gm.ernst@outlook.com")
-Description: What the package does (one paragraph).
+Title: RNAmodR.AlkAnilineSeq: detection of m7G, m3C and D modification by AlkAnilineSeq
+Version: 0.0.1
+Authors@R: c(person("Felix G.M.", 
+                    "Ernst", 
+                    email = "felix.gm.ernst@outlook.com", 
+                    role = c("aut", "cre")),
+             person("Denis L.J.", 
+                    "Lafontaine", 
+                    email = "denis.lafontaine@ulb.ac.be", 
+                    role = c("ctb", "fnd")))
+Description: Detection of m7G, m3C and D modifications on RNA sequenced using 
+    the AlkAnilineSeq protocol.
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
@@ -21,9 +25,9 @@ Suggests:
     knitr,
     rmarkdown,
     testthat
-VignetteBuilder: knitr
-RoxygenNote: 6.1.1
 Collate: 
     'RNAmodR.AlkAnilineSeq.R'
     'Modifier-AlkAnilineSeq-class.R'
     'Modifier-AlkAnilineSeq-viz.R'
+VignetteBuilder: knitr
+RoxygenNote: 6.1.1
