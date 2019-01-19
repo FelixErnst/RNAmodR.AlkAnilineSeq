@@ -9,6 +9,7 @@
 \alias{ModAlkAnilineSeq,character-method}
 \alias{ModAlkAnilineSeq,BamFileList-method}
 \alias{ModAlkAnilineSeq,SequenceData-method}
+\alias{ModAlkAnilineSeq,list-method}
 \alias{modify,ModAlkAnilineSeq-method}
 \alias{ModSetAlkAnilineSeq-class}
 \alias{ModSetAlkAnilineSeq}
@@ -21,13 +22,13 @@
 \usage{
 \S4method{settings}{ModAlkAnilineSeq}(x) <- value
 
-\S4method{ModAlkAnilineSeq}{character}(x, fasta, gff,
-  modifications = NULL, ...)
+\S4method{ModAlkAnilineSeq}{character}(x, fasta, gff, ...)
 
-\S4method{ModAlkAnilineSeq}{BamFileList}(x, fasta, gff,
-  modifications = NULL, ...)
+\S4method{ModAlkAnilineSeq}{BamFileList}(x, fasta, gff, ...)
 
-\S4method{ModAlkAnilineSeq}{SequenceData}(x, modifications = NULL, ...)
+\S4method{ModAlkAnilineSeq}{SequenceData}(x, ...)
+
+\S4method{ModAlkAnilineSeq}{list}(x, ...)
 
 \S4method{aggregate}{ModAlkAnilineSeq}(x, force = FALSE)
 

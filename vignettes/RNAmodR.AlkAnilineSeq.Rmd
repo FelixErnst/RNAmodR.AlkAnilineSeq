@@ -15,3 +15,75 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 bibliography: references.bib
 ---
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown(css.files = c('custom.css'))
+```
+
+# Introduction
+
+
+
+
+
+
+
+
+
+```{r, echo = FALSE}
+suppressPackageStartupMessages({
+  library(GenomicFeatures)
+  library(RNAmodR.RiboMethSeq)
+})
+```
+```{r, eval = FALSE}
+library(GenomicFeatures)
+library(RNAmodR.RiboMethSeq)
+```
+
+# Example workflow
+
+Loading files
+```{r}
+gff <- system.file("extdata","example_AAS.gff3" ,package = "RNAmodR.Data")
+fasta <- system.file("extdata","example_AAS.fasta" ,package = "RNAmodR.Data")
+files <- list("BY4741" = c(treated = system.file("extdata","example_wt_1.bam" ,package = "RNAmodR.Data"),
+                           treated = system.file("extdata","example_wt_2.bam" ,package = "RNAmodR.Data"),
+                           treated = system.file("extdata","example_wt_3.bam" ,package = "RNAmodR.Data")),
+              "BY4741 Bud23del" = c(treated = system.file("extdata","example_Bud23_1.bam" ,package = "RNAmodR.Data"),
+                                    treated = system.file("extdata","example_Bud23_2.bam" ,package = "RNAmodR.Data")),
+              "BY4741 Trm8del" = c(treated = system.file("extdata","example_Trm8_1.bam" ,package = "RNAmodR.Data"),
+                                   treated = system.file("extdata","example_Trm8_2.bam" ,package = "RNAmodR.Data")))
+```
+
+Analysis of data
+
+```{r}
+msaas <- ModSetAlkAnilineSeq(files,fasta,gff)
+```
+
+# Visualizing the results
+
+```{r}
+
+```
+
+Heatmap
+
+```{r}
+
+```
+
+sequence specific result
+
+```{r}
+
+```
+
+# Session info
+
+```{r, sessioninfo}
+sessioninfo::session_info()
+```
+
+# References

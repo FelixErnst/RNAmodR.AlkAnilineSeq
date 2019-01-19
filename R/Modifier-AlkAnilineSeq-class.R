@@ -35,7 +35,8 @@ setClass("ModAlkAnilineSeq",
          contains = c("Modifier"),
          prototype = list(mod = c("m7G","m3C","D"),
                           score = "scoreNC",
-                          dataClass = "NormEnd5SequenceData"))
+                          dataType = c("NormEnd5SequenceData",
+                                       "PileupSequenceData")))
 
 
 setMethod(
@@ -53,11 +54,10 @@ setMethod(
   }
 )
 
-# constructors -----------------------------------------------------------------
-
+# settings ---------------------------------------------------------------------
 .norm_aas_args <- function(input){
   maxLength <- NA # for all scores
-  minLength <- 9L # for all scores
+  minLength <- 10L # for all scores
   minSignal <- 10L # for all scores
   minScoreNC <- 50L # for score normalized cleavage
   minScoreSR <- 0.50 # for score stop ratio
@@ -121,6 +121,36 @@ setReplaceMethod(f = "settings",
                    x
                  })
 
+# constructors -----------------------------------------------------------------
+
+.AlkAnilineSeq_from_character <- function(x,
+                                          fasta,
+                                          gff,
+                                          args){
+  ans <- new("ModAlkAnilineSeq",
+             x,
+             fasta,
+             gff)
+  ans <- RNAmodR:::.ModFromCharacter(ans,
+                                     args)
+  ans <- RNAmodR:::.norm_modifications(ans,
+                                       args)
+  ans
+}
+.AlkAnilineSeq_from_SequenceData <- function(x,
+                                             args){
+  x <- as(x,"SequenceDataList")
+  ans <- new("ModAlkAnilineSeq",
+             bamfiles(x),
+             fasta(x),
+             gff(x))
+  ans <- RNAmodR:::.ModFromSequenceData(ans,
+                                        x,
+                                        args)
+  ans <- RNAmodR:::.norm_modifications(ans,
+                                       args)
+  ans
+}
 
 setGeneric( 
   name = "ModAlkAnilineSeq",
@@ -135,17 +165,11 @@ setMethod("ModAlkAnilineSeq",
           function(x,
                    fasta,
                    gff,
-                   modifications = NULL,
                    ...){
-            ans <- new("ModAlkAnilineSeq",
-                       x,
-                       fasta,
-                       gff)
-            ans <- RNAmodR:::.ModFromCharacter(ans,
-                                               list(...))
-            ans <- RNAmodR:::.norm_modifications(ans,
-                                                 list(...))
-            ans
+            .AlkAnilineSeq_from_character(x,
+                                          fasta,
+                                          gff,
+                                          list(...))
           }
 )
 
@@ -157,17 +181,11 @@ setMethod("ModAlkAnilineSeq",
           function(x,
                    fasta,
                    gff,
-                   modifications = NULL,
                    ...){
-            ans <- new("ModAlkAnilineSeq",
-                       x,
-                       fasta,
-                       gff)
-            ans <- RNAmodR:::.ModFromCharacter(ans,
-                                               list(...))
-            ans <- RNAmodR:::.norm_modifications(ans,
-                                                 list(...))
-            ans
+            .AlkAnilineSeq_from_character(x,
+                                          fasta,
+                                          gff,
+                                          list(...))
           }
 )
 
@@ -177,43 +195,79 @@ setMethod("ModAlkAnilineSeq",
 setMethod("ModAlkAnilineSeq",
           signature = c(x = "SequenceData"),
           function(x,
-                   modifications = NULL,
                    ...){
-            ans <- new("ModAlkAnilineSeq",
-                       bamfiles(x),
-                       fasta(x),
-                       gff(x))
-            ans <- RNAmodR:::.ModFromSequenceData(ans,
-                                                  x,
-                                                  list(...))
-            ans <- RNAmodR:::.norm_modifications(ans,
-                                                 list(...))
-            ans
+            .AlkAnilineSeq_from_SequenceData(list(x),
+                                             list(...))
+          }
+)
+#' @rdname ModAlkAnilineSeq
+#' @export
+setMethod("ModAlkAnilineSeq",
+          signature = c(x = "list"),
+          function(x,
+                   ...){
+            .AlkAnilineSeq_from_SequenceData(x,
+                                             list(...))
           }
 )
 
 # functions --------------------------------------------------------------------
 
+.calculate_base_score <- function(x,seq){
+  seq <- IRanges::CharacterList(strsplit(as.character(seq),""))
+  data <- x@unlistData
+  baseSelect <- S4Vectors::DataFrame("G" = unlist(seq) == "G",
+                          "A" = unlist(seq) == "A",
+                          "U" = unlist(seq) == "U",
+                          "C" = unlist(seq) == "C")
+  baseColumns <- which(colnames(data) %in% c("means.G",
+                                             "means.A",
+                                             "means.T",
+                                             "means.C"))
+  baseData <- as(data[,baseColumns],"NumericList")
+  baseSelect <- as(baseSelect,"LogicalList")
+  tmpBaseValues <- unname(baseData)[unname(baseSelect)]
+  baseValues <- rep(0,nrow(data))
+  baseValues[which(baseSelect[[1]])] <- tmpBaseValues[[1]]
+  baseValues[which(baseSelect[[2]])] <- tmpBaseValues[[2]]
+  baseValues[which(baseSelect[[3]])] <- tmpBaseValues[[3]]
+  baseValues[which(baseSelect[[4]])] <- tmpBaseValues[[4]]
+  baseValues[is.na(baseValues)] <- 0
+  baseValues[is.infinite(baseValues)] <- 0
+  baseValues
+}
+
 .aggregate_aas <- function(x){
   message("Aggregating data and calculating scores...")
-  # get the means. the sds arecurrently disregarded for this analysis
   mod <- aggregate(seqData(x),
                    condition = "Treated")
+  if(is.null(names(mod))){
+    names(mod) <- vapply(mod,class,character(1))
+  }
+  # get the NormEnd5SequenceData
   # shift each result one position upstream, since the signal has an N+1 offset
-  offsetAdd <- S4Vectors::DataFrame(as.list(rep(0,ncol(mod@unlistData))))
-  colnames(offsetAdd) <- colnames(mod@unlistData)
-  mod <- IRanges::SplitDataFrameList(lapply(mod,
-                                            function(m){
-                                              m <- m[seq.int(2L,nrow(m)),]
-                                              rbind(m,offsetAdd)
-                                            }))
+  endData <- mod[["NormEnd5SequenceData"]]
+  offsetAdd <- S4Vectors::DataFrame(as.list(rep(0,ncol(endData@unlistData))))
+  colnames(offsetAdd) <- colnames(endData@unlistData)
+  endData <- IRanges::SplitDataFrameList(lapply(endData,
+                                                function(m){
+                                                  m <- m[seq.int(2L,nrow(m)),]
+                                                  rbind(m,offsetAdd)
+                                                }))
+  # get the PileupSequenceData
+  # calculate base score
+  pileupData <- mod[["PileupSequenceData"]]
+  score <- .calculate_base_score(pileupData,sequences(x))
   # subset to columns needed
-  data <- mod@unlistData[,c("means.ends",
-                            "means.tx",
-                            "means.ol")]
+  data <- endData@unlistData[,c("means.ends",
+                                "means.tx",
+                                "means.ol")]
   colnames(data) <- c("ends","scoreNC","scoreSR")
+  # add base score
+  data$baseScore <- score
+  # split and return
   data <- IRanges::SplitDataFrameList(data)
-  data@partitioning <- mod@partitioning
+  data@partitioning <- endData@partitioning
   data
 }
 
@@ -271,7 +325,8 @@ setMethod(
       m <- m[mapply(Reduce,
                     rep(scoreOperator,nrow(m)),
                     m$scoreNC >= minScoreNC,
-                    m$scoreSR >= minScoreSR),]
+                    m$scoreSR >= minScoreSR,
+                    m$baseScore >= 0.9),]
       if(nrow(m) == 0L) return(NULL)
       ansm7G <- RNAmodR:::.constructModRanges(
         r,
@@ -337,4 +392,3 @@ setClass("ModSetAlkAnilineSeq",
 ModSetAlkAnilineSeq <- function(x, fasta = NA, gff = NA){
   ModifierSet("ModAlkAnilineSeq", x, fasta = fasta, gff = gff)
 }
-
