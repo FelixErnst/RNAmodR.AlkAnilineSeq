@@ -27,18 +27,14 @@ setMethod(
   f = "visualizeDataByCoord",
   signature = signature(x = "ModAlkAnilineSeq",
                         coord = "GRanges"),
-  definition = function(x,
-                        coord,
+  definition = function(x, coord,
                         type = c("ends","scoreNC","scoreSR"),
                         window.size = 15L,
                         ...) {
     if(missing(type)){
       type <- RNAMODR_AAS_PLOT_DATA
     }
-    callNextMethod(x = x,
-                   coord = coord,
-                   type = type,
-                   window.size = window.size,
+    callNextMethod(x = x, coord = coord, type = type, window.size = window.size,
                    ...)
   }
 )
@@ -47,22 +43,13 @@ setMethod(
 setMethod(
   f = "visualizeData",
   signature = signature(x = "ModAlkAnilineSeq"),
-  definition = function(x,
-                        name,
-                        from,
-                        to,
-                        type = c("ends","scoreNC","scoreSR"),
-                        ...) {
+  definition = function(x, name, from, to,
+                        type = c("ends","scoreNC","scoreSR"), ...) {
     browser()
     if(missing(type)){
       type <- RNAMODR_AAS_PLOT_DATA
     }
-    callNextMethod(x = x,
-                   name,
-                   from,
-                   to,
-                   type = type,
-                   ...)
+    callNextMethod(x = x, name, from,  to, type = type, ...)
   }
 )
 
@@ -72,11 +59,7 @@ setMethod(
                         data = "GRanges",
                         seqdata = "GRanges",
                         sequence = "XString"),
-  definition = function(x,
-                        data,
-                        seqdata,
-                        sequence,
-                        args) {
+  definition = function(x, data, seqdata, sequence, args) {
     n <- ncol(mcols(data))
     colour <- args[["colour"]]
     if(is.na(colour) || length(colour) != n){
@@ -120,16 +103,11 @@ setMethod(
   f = "visualizeDataByCoord",
   signature = signature(x = "ModSetAlkAnilineSeq",
                         coord = "GRanges"),
-  definition = function(x,
-                        coord,
+  definition = function(x, coord,
                         type = c("scoreNC","scoreSR","ends"),
-                        window.size = 15L,
-                        ...) {
+                        window.size = 15L, ...) {
     type <- match.arg(type,c("scoreNC","scoreSR","ends"))
-    callNextMethod(x = x,
-                   coord = coord,
-                   type = type,
-                   window.size = window.size,
+    callNextMethod(x = x, coord = coord, type = type, window.size = window.size,
                    ...)
   }
 )
@@ -138,18 +116,10 @@ setMethod(
 setMethod(
   f = "visualizeData",
   signature = signature(x = "ModSetAlkAnilineSeq"),
-  definition = function(x,
-                        name,
-                        from,
-                        to,
+  definition = function(x, name, from, to,
                         type = c("scoreNC","scoreSR","ends"),
                         ...) {
     type <- match.arg(type,c("scoreNC","scoreSR","ends"))
-    callNextMethod(x = x,
-                   name,
-                   from,
-                   to,
-                   type = type,
-                   ...)
+    callNextMethod(x = x, name, from, to, type = type, ...)
   }
 )

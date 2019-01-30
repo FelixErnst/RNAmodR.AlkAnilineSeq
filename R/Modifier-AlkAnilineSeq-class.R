@@ -10,6 +10,9 @@ NULL
 #' @description 
 #' title
 #' 
+#' @param annotation
+#' @param sequences
+#' @param seqinfo
 #' @param ... Optional arguments overwriting default values, which are
 #' \itemize{
 #' \item{minSignal:}{The minimal singal at the position as integer value 
@@ -25,8 +28,6 @@ NULL
 #' \item{other arguments}{which are passed on to 
 #' \code{\link{End5SequenceData}}}
 #' }
-#' 
-#' 
 NULL
 
 #' @rdname ModAlkAnilineSeq
@@ -37,22 +38,6 @@ setClass("ModAlkAnilineSeq",
                           score = "scoreNC",
                           dataType = c("NormEnd5SequenceData",
                                        "PileupSequenceData")))
-
-
-setMethod(
-  f = "initialize", 
-  signature = signature(.Object = "ModAlkAnilineSeq"),
-  definition = function(.Object,
-                        bamfiles,
-                        fasta,
-                        gff) {
-    .Object <- callNextMethod(.Object,
-                              bamfiles,
-                              fasta,
-                              gff)
-    return(.Object)
-  }
-)
 
 # settings ---------------------------------------------------------------------
 .norm_aas_args <- function(input){
@@ -114,7 +99,7 @@ setMethod(
 #' @export
 setReplaceMethod(f = "settings", 
                  signature = signature(x = "ModAlkAnilineSeq"),
-                 definition = function(x,value){
+                 definition = function(x, value){
                    x <- callNextMethod()
                    value <- .norm_aas_args(value)
                    x@arguments[names(value)] <- unname(value)
@@ -123,93 +108,12 @@ setReplaceMethod(f = "settings",
 
 # constructors -----------------------------------------------------------------
 
-.AlkAnilineSeq_from_character <- function(x,
-                                          fasta,
-                                          gff,
-                                          args){
-  ans <- new("ModAlkAnilineSeq",
-             x,
-             fasta,
-             gff)
-  ans <- RNAmodR:::.ModFromCharacter(ans,
-                                     args)
-  ans <- RNAmodR:::.norm_modifications(ans,
-                                       args)
-  ans
+#' @rdname ModAlkAnilineSeq
+#' @export
+ModInosine <- function(x, annotation = NA, sequences = NA, seqinfo = NA, ...){
+  Modifier("ModAlkAnilineSeq", x = x, annotation = annotation, 
+           sequences = sequences, seqinfo = seqinfo, ...)
 }
-.AlkAnilineSeq_from_SequenceData <- function(x,
-                                             args){
-  x <- as(x,"SequenceDataList")
-  ans <- new("ModAlkAnilineSeq",
-             bamfiles(x),
-             fasta(x),
-             gff(x))
-  ans <- RNAmodR:::.ModFromSequenceData(ans,
-                                        x,
-                                        args)
-  ans <- RNAmodR:::.norm_modifications(ans,
-                                       args)
-  ans
-}
-
-setGeneric( 
-  name = "ModAlkAnilineSeq",
-  def = function(x,
-                 ...) standardGeneric("ModAlkAnilineSeq")
-)
-# Create Modifier class from file character, fasta and gff file
-#' @rdname ModAlkAnilineSeq
-#' @export
-setMethod("ModAlkAnilineSeq",
-          signature = c(x = "character"),
-          function(x,
-                   fasta,
-                   gff,
-                   ...){
-            .AlkAnilineSeq_from_character(x,
-                                          fasta,
-                                          gff,
-                                          list(...))
-          }
-)
-
-# Create Modifier class from bamfiles, fasta and gff file
-#' @rdname ModAlkAnilineSeq
-#' @export
-setMethod("ModAlkAnilineSeq",
-          signature = c(x = "BamFileList"),
-          function(x,
-                   fasta,
-                   gff,
-                   ...){
-            .AlkAnilineSeq_from_character(x,
-                                          fasta,
-                                          gff,
-                                          list(...))
-          }
-)
-
-# Create Modifier class from existing SequenceData
-#' @rdname ModAlkAnilineSeq
-#' @export
-setMethod("ModAlkAnilineSeq",
-          signature = c(x = "SequenceData"),
-          function(x,
-                   ...){
-            .AlkAnilineSeq_from_SequenceData(list(x),
-                                             list(...))
-          }
-)
-#' @rdname ModAlkAnilineSeq
-#' @export
-setMethod("ModAlkAnilineSeq",
-          signature = c(x = "list"),
-          function(x,
-                   ...){
-            .AlkAnilineSeq_from_SequenceData(x,
-                                             list(...))
-          }
-)
 
 # functions --------------------------------------------------------------------
 
@@ -277,8 +181,7 @@ setMethod(
   f = "aggregate", 
   signature = signature(x = "ModAlkAnilineSeq"),
   definition = 
-    function(x,
-             force = FALSE){
+    function(x, force = FALSE){
       if(missing(force)){
         force <- FALSE
       }
@@ -368,8 +271,7 @@ setMethod(
 #' @export
 setMethod("modify",
           signature = c(x = "ModAlkAnilineSeq"),
-          function(x,
-                   force){
+          function(x, force){
             # get the aggregate data
             x <- aggregate(x, force)
             x@modifications <- .find_aas(x)
@@ -389,6 +291,8 @@ setClass("ModSetAlkAnilineSeq",
 
 #' @rdname ModAlkAnilineSeq
 #' @export
-ModSetAlkAnilineSeq <- function(x, fasta = NA, gff = NA){
-  ModifierSet("ModAlkAnilineSeq", x, fasta = fasta, gff = gff)
+ModSetAlkAnilineSeq <- function(x, annotation = NA, sequences = NA,
+                                seqinfo = NA){
+  ModifierSet("ModAlkAnilineSeq", x, annotation = annotation,
+              sequences = sequences, seqinfo = seqinfo)
 }
