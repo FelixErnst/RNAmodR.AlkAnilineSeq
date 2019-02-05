@@ -21,12 +21,19 @@ NULL
 #' unmodified nucleotide is different for the three modified nucleotides, they
 #' modification can be detected at the same time from the same samples.
 #' 
-#' The \code{ModAlkAnilineSeq} class uses the the 
+#' The \code{ModAlkAnilineSeq} class uses the  
 #' \code{\link[RNAmodR:NormEndSequenceData]{NormEnd5SequenceData}}
 #' class to store and aggregate data along the transcripts. This includes 
 #' normalized values against the whole transcript (normalzed cleavage) and 
 #' normalized values against the overlapping reads (stop ratio), which are used
 #' to score for modified positions.
+#' 
+#' In addition the \code{\link[RNAmodR:PileupSequenceData]{PileupSequenceData}}
+#' class is used as well, to check, whether the base is can be called according
+#' to the expected sequence identity.
+#' 
+#' Only samples named \code{treated are used for this analysis}. Normalization 
+#' to untreated samples is currently not used.
 #' 
 #' @param x the input which can be of the different types depending on whether
 #' a \code{ModRiboMethSeq} or a \code{ModSetRiboMethSeq} object is to be 
@@ -167,8 +174,7 @@ NULL
   }
   args <- RNAmodR:::.norm_args(input)
   args <- c(args,
-            list(maxLength = maxLength,
-                 minLength = minLength,
+            list(minLength = minLength,
                  minSignal = minSignal,
                  minScoreNC = minScoreNC,
                  minScoreSR = minScoreSR,
@@ -196,10 +202,10 @@ setReplaceMethod(f = "settings",
                           "A" = unlist(seq) == "A",
                           "U" = unlist(seq) == "U",
                           "C" = unlist(seq) == "C")
-  baseColumns <- which(colnames(data) %in% c("means.G",
-                                             "means.A",
-                                             "means.T",
-                                             "means.C"))
+  baseColumns <- which(colnames(data) %in% c("means.treated.G",
+                                             "means.treated.A",
+                                             "means.treated.T",
+                                             "means.treated.C"))
   baseData <- as(data[,baseColumns],"NumericList")
   baseSelect <- as(baseSelect,"LogicalList")
   tmpBaseValues <- unname(baseData)[unname(baseSelect)]
@@ -215,8 +221,7 @@ setReplaceMethod(f = "settings",
 
 .aggregate_aas <- function(x){
   message("Aggregating data and calculating scores...")
-  mod <- aggregate(seqData(x),
-                   condition = "Treated")
+  mod <- aggregate(seqData(x), condition = "Treated")
   if(is.null(names(mod))){
     names(mod) <- vapply(mod,class,character(1))
   }
@@ -235,9 +240,9 @@ setReplaceMethod(f = "settings",
   pileupData <- mod[["PileupSequenceData"]]
   score <- .calculate_base_score(pileupData,sequences(x))
   # subset to columns needed
-  data <- endData@unlistData[,c("means.ends",
-                                "means.tx",
-                                "means.ol")]
+  data <- endData@unlistData[,c("means.treated.ends",
+                                "means.treated.tx",
+                                "means.treated.ol")]
   colnames(data) <- c("ends","scoreNC","scoreSR")
   # add base score
   data$baseScore <- score
@@ -274,9 +279,7 @@ setMethod(
   message("Searching for m7G/m3C/D ...")
   #
   letters <- IRanges::CharacterList(strsplit(as.character(sequences(x)),""))
-  ranges <- ranges(x)
-  ranges <- split(RNAmodR:::.get_parent_annotations(ranges),
-                  seq_along(ranges))
+  grl <- ranges(x)
   # get the aggregate data
   mod <- aggregateData(x)
   # set up some arguments
@@ -330,7 +333,7 @@ setMethod(
     },
     mod,
     letters,
-    ranges,
+    grl,
     signal)
   modifications <- GenomicRanges::GRangesList(
     modifications[!vapply(modifications,

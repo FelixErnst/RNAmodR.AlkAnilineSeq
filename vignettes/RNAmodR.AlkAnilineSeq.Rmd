@@ -32,21 +32,25 @@ BiocStyle::markdown(css.files = c('custom.css'))
 
 ```{r, echo = FALSE}
 suppressPackageStartupMessages({
+  library(rtracklayer)
+  library(Rsamtools)
   library(GenomicFeatures)
-  library(RNAmodR.RiboMethSeq)
+  library(RNAmodR.AlkAnilineSeq)
 })
 ```
 ```{r, eval = FALSE}
+library(rtracklayer)
+library(Rsamtools)
 library(GenomicFeatures)
-library(RNAmodR.RiboMethSeq)
+library(RNAmodR.AlkAnilineSeq)
 ```
 
 # Example workflow
 
 Loading files
 ```{r}
-gff <- system.file("extdata","example_AAS.gff3" ,package = "RNAmodR.Data")
-fasta <- system.file("extdata","example_AAS.fasta" ,package = "RNAmodR.Data")
+annotation <- GFF3File(system.file("extdata","example_AAS.gff3" ,package = "RNAmodR.Data"))
+sequences <- FaFile(system.file("extdata","example_AAS.fasta" ,package = "RNAmodR.Data"))
 files <- list("BY4741" = c(treated = system.file("extdata","example_wt_1.bam" ,package = "RNAmodR.Data"),
                            treated = system.file("extdata","example_wt_2.bam" ,package = "RNAmodR.Data"),
                            treated = system.file("extdata","example_wt_3.bam" ,package = "RNAmodR.Data")),
@@ -59,7 +63,7 @@ files <- list("BY4741" = c(treated = system.file("extdata","example_wt_1.bam" ,p
 Analysis of data
 
 ```{r}
-msaas <- ModSetAlkAnilineSeq(files,fasta,gff)
+msaas <- ModSetAlkAnilineSeq(files, annotation = annotation, sequences = sequences)
 ```
 
 # Visualizing the results
