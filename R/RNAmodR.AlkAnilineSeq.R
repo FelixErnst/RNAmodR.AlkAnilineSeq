@@ -1,17 +1,26 @@
 #' @title RNAmodR.AlkAnilineSeq
 #' 
-#' @author Felix G M Ernst [aut]
+#' @author Felix G M Ernst [aut], Denis L J Lafontaine [fnd]
 #' 
 #' @description
-#' todo xczCZXcZZcc cCX 
+#' `RNAmodR.AlkAnilineSeq` implements the detection of 7-methyl guanosine,
+#' 3-methyl cytidine and dihydrouridine from AlkAnilineseq data using the 
+#' workflow and class the package `RNAmodR` provides.
+#' 
+#' @seealso Further details are described in the man pages of the 
+#' \code{\link[RNAmodR:Modifier-class]{Modifier}} object and the vignettes.
 #'
 #' @docType package
 #' @name RNAmodR.AlkAnilineSeq
 NULL
 
 #' @import methods
-#' @import assertive
 #' @import RNAmodR
+#' @import S4Vectors
+#' @import BiocGenerics
+#' @import IRanges
+#' @import GenomicRanges
+#' @import Gviz
 NULL
 requireNamespace("IRanges")
 requireNamespace("RNAmodR")

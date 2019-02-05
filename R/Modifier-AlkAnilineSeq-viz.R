@@ -11,26 +11,15 @@ RNAMODR_AAS_PLOT_DATA_NAMES <- c(ends = "5'-ends",
 RNAMODR_AAS_PLOT_DATA_COLOURS <- c(ends = "#FBB4AE",
                                    scoreNC = "#DECBE4",
                                    scoreSR = "#CCEBC5")
-#' @rdname ModAlkAnilineSeq
-#' 
-#' @name visualizeData
-#' @details 
-#' \code{ModAlkAnilineSeq} specific arguments for \link{visualizeData}:
-#' \itemize{
-#' 
-#' }
-NULL
 
-#' @rdname ModAlkAnilineSeq
+#' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
   f = "visualizeDataByCoord",
   signature = signature(x = "ModAlkAnilineSeq",
                         coord = "GRanges"),
-  definition = function(x, coord,
-                        type = c("ends","scoreNC","scoreSR"),
-                        window.size = 15L,
-                        ...) {
+  definition = function(x, coord, type = c("ends","scoreNC","scoreSR"),
+                        window.size = 15L, ...) {
     if(missing(type)){
       type <- RNAMODR_AAS_PLOT_DATA
     }
@@ -38,18 +27,17 @@ setMethod(
                    ...)
   }
 )
-#' @rdname ModAlkAnilineSeq
+#' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
   f = "visualizeData",
   signature = signature(x = "ModAlkAnilineSeq"),
-  definition = function(x, name, from, to,
-                        type = c("ends","scoreNC","scoreSR"), ...) {
-    browser()
+  definition = function(x, name, from, to, type = c("ends","scoreNC","scoreSR"),
+                        ...) {
     if(missing(type)){
       type <- RNAMODR_AAS_PLOT_DATA
     }
-    callNextMethod(x = x, name, from,  to, type = type, ...)
+    callNextMethod(x = x, name = name, from = from, to = to, type = type, ...)
   }
 )
 
@@ -97,29 +85,27 @@ setMethod(
   }
 )
 
-#' @rdname ModAlkAnilineSeq
+#' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
   f = "visualizeDataByCoord",
   signature = signature(x = "ModSetAlkAnilineSeq",
                         coord = "GRanges"),
-  definition = function(x, coord,
-                        type = c("scoreNC","scoreSR","ends"),
+  definition = function(x, coord, type = c("scoreNC","scoreSR","ends"),
                         window.size = 15L, ...) {
     type <- match.arg(type,c("scoreNC","scoreSR","ends"))
     callNextMethod(x = x, coord = coord, type = type, window.size = window.size,
                    ...)
   }
 )
-#' @rdname ModAlkAnilineSeq
+#' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
   f = "visualizeData",
   signature = signature(x = "ModSetAlkAnilineSeq"),
-  definition = function(x, name, from, to,
-                        type = c("scoreNC","scoreSR","ends"),
+  definition = function(x, name, from, to, type = c("scoreNC","scoreSR","ends"),
                         ...) {
     type <- match.arg(type,c("scoreNC","scoreSR","ends"))
-    callNextMethod(x = x, name, from, to, type = type, ...)
+    callNextMethod(x = x, name = name, from = from, to = to, type = type, ...)
   }
 )

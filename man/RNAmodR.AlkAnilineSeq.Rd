@@ -6,8 +6,14 @@
 \alias{RNAmodR.AlkAnilineSeq-package}
 \title{RNAmodR.AlkAnilineSeq}
 \description{
-todo xczCZXcZZcc cCX
+`RNAmodR.AlkAnilineSeq` implements the detection of 7-methyl guanosine,
+3-methyl cytidine and dihydrouridine from AlkAnilineseq data using the 
+workflow and class the package `RNAmodR` provides.
+}
+\seealso{
+Further details are described in the man pages of the 
+\code{\link[RNAmodR:Modifier-class]{Modifier}} object and the vignettes.
 }
 \author{
-Felix G M Ernst [aut]
+Felix G M Ernst [aut], Denis L J Lafontaine [fnd]
 }

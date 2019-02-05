@@ -2,32 +2,72 @@
 NULL
 
 #' @name ModAlkAnilineSeq
-#' @aliases AlkAnilineSeq ModAlkAnilineSeq
+#' @aliases AlkAnilineSeq ModAlkAnilineSeq ModSetAlkAnilineSeq
 #' 
-#' @author Felix G.M. Ernst \email{felix.gm.ernst@@outlook.com}
+#' @author Felix G.M. Ernst [aut]
 #' 
-#' @title ModAlkAnilineSeq
+#' @title ModAlkAnilineSeq class to analyze AlkAnilineSeq data
+#' 
 #' @description 
-#' title
+#' 7-methyl guanosine (m7G), 3-methyl cytidine (m3C) and Dihydrouridine (D) 
+#' are commonly found in rRNA and tRNA and can be detected classically by
+#' primer extension analysis. However, since the modifications do not interfere
+#' with Watson-Crick base pairing, a specific chemical treatment is employed
+#' to cause strand breaks specifically at the modified positions.
 #' 
-#' @param annotation
-#' @param sequences
-#' @param seqinfo
+#' This classical protocol was converted to a high throughput sequencing 
+#' method call AlkAnilineSeq and allows modified position be detected by an
+#' accumulation of 5'-ends at the N+1 position. Since the identify of the 
+#' unmodified nucleotide is different for the three modified nucleotides, they
+#' modification can be detected at the same time from the same samples.
+#' 
+#' The \code{ModAlkAnilineSeq} class uses the the 
+#' \code{\link[RNAmodR:NormEndSequenceData]{NormEnd5SequenceData}}
+#' class to store and aggregate data along the transcripts. This includes 
+#' normalized values against the whole transcript (normalzed cleavage) and 
+#' normalized values against the overlapping reads (stop ratio), which are used
+#' to score for modified positions.
+#' 
+#' @param x the input which can be of the different types depending on whether
+#' a \code{ModRiboMethSeq} or a \code{ModSetRiboMethSeq} object is to be 
+#' constructed. For more information have a look at the documentation of
+#' the \code{\link[RNAmodR:Modifier-class]{Modifier}} and 
+#' \code{\link[RNAmodR:ModifierSet-class]{ModifierSet}} classes.
+#' @param annotation annotation data, which must match the information contained
+#' in the BAM files. This is parameter is only required if \code{x} if not a 
+#' \code{Modifier} object.
+#' @param sequences sequences matching the target sequences the reads were 
+#' mapped onto. This must match the information contained in the BAM files. This
+#' is parameter is only required if \code{x} if not a \code{Modifier} object.
+#' @param seqinfo An optional \code{\link[GenomeInfoDb:Seqinfo-class]{Seqinfo}} 
+#' argument or character vector, which can be coerced to one, to subset the 
+#' sequences to be analyzed on a per chromosome basis.
 #' @param ... Optional arguments overwriting default values, which are
 #' \itemize{
-#' \item{minSignal:}{The minimal singal at the position as integer value 
+#' \item{minLength:} {The minimal read length to be used for the analysis 
+#' (default: \code{minLength = 9L}).}
+#' \item{minSignal:} {The minimal signal at the position as integer value 
 #' (default: \code{minSignal = 10L}). If the reaction is very specific a lower
 #' value may need to be used}
-#' \item{minScore:}{minimum for score to identify m7G, m3C and D positions 
-#' de novo (default: \code{minScore = 0.5})}
-#' \item{maxLength:}{The default read length. Reads with this length or longer
-#' are discarded, since they represent non-fragemented reads. This might need to
-#' be adjusted for individual samples dending on the experimental conditions.
-#' This is argument is passed on to \code{\link{ProtectedEndSequenceData}} 
-#' (default: \code{maxLength = 50L})}
-#' \item{other arguments}{which are passed on to 
-#' \code{\link{End5SequenceData}}}
+#' \item{minScoreNC:} {minimum for score (normalized cleavage) to identify m7G,
+#' m3C and D positions de novo (default: \code{minScoreNC = 50L})}
+#' \item{minScoreSR:} {minimum for score (stop ration) to identify m7G, m3C and D
+#' positions de novo (default: \code{minScoreSR = 0.5})}
+#' \item{scoreOperator:} {how the minimal score should be used as logical 
+#' operator. "&" requires all minimal values to be exceeded, whereas "|" detects
+#' positions, if at least one minimal values is exceeded (default: 
+#' \code{scoreOperator = "&"}).}
+#' \item{other arguments} {which are passed on to 
+#' \code{\link[RNAmodR:EndSequenceData]{End5SequenceData}}}
 #' }
+#' 
+#' @references 
+#' - Marchand V, Ayadi L, __Ernst FGM__, Hertler J, Bourguignon-Igel V,
+#' Galvanin A, Kotter A, Helm M, __Lafontaine DLJ__, Motorin Y (2018): 
+#' "AlkAniline-Seq: Profiling of m7 G and m3 C RNA Modifications at Single 
+#' Nucleotide Resolution." Angewandte Chemie (International ed. in English) 57 
+#' (51), P. 16785–16790. DOI: 
+#' \href{https://doi.org/10.1002/anie.201810946}{10.1002/anie.201810946}.
 NULL
 
 #' @rdname ModAlkAnilineSeq
@@ -39,10 +79,51 @@ setClass("ModAlkAnilineSeq",
                           dataType = c("NormEnd5SequenceData",
                                        "PileupSequenceData")))
 
+# constructors -----------------------------------------------------------------
+
+#' @rdname ModAlkAnilineSeq
+#' @export
+ModAlkAnilineSeq <- function(x, annotation = NA, sequences = NA, seqinfo = NA,
+                             ...){
+  RNAmodR::Modifier("ModAlkAnilineSeq", x = x, annotation = annotation, 
+                    sequences = sequences, seqinfo = seqinfo, ...)
+}
+
 # settings ---------------------------------------------------------------------
+
+#' @name ModAlkAnilineSeq-functions
+#' @aliases aggregate modify settings visualizeData visualizeDataByCoord
+#' 
+#' @title Functions for ModAlkAnilineSeq
+#' 
+#' @description
+#' All of the functions of \code{\link[RNAmodR:Modifier-class]{Modifier}} and
+#' the \code{\link[RNAmodR:ModifierSet-class]{ModifierSet}} classes are
+#' inherited by the \code{ModAlkAnilineSeq} and \code{ModSetAlkAnilineSeq}
+#' classes.
+#' 
+#' @param x a \code{\link[RNAmodR:Modifier-class]{Modifier}} or a
+#' \code{\link[RNAmodR:ModifierSet-class]{ModifierSet}} object. For more
+#' details see also the man pages for the functions mentioned below.
+#' @param value See \code{\link[RNAmodR:Modifier-class]{settings}}
+#' @param force See \code{\link[RNAmodR:aggregate]{aggregate}}
+#' @param coord,name,from,to,type,window.size,... See 
+#' \code{\link[RNAmodR:visualizeData]{visualizeData}}.
+#' 
+#' @details 
+#' \code{ModAlkAnilineSeq} specific arguments for \link{visualizeData}:
+#' \itemize{
+#' \item{\code{colour} - }{a named character vector of \code{length = 4} 
+#' for the colours of the individual histograms. The names are expected to be 
+#' \code{c("ends","scoreA","scoreB","scoreRMS")}}
+#' }
+#' 
+#' @importMethodsFrom RNAmodR modify aggregate settings visualizeData 
+#' visualizeDataByCoord
+NULL
+
 .norm_aas_args <- function(input){
-  maxLength <- NA # for all scores
-  minLength <- 10L # for all scores
+  minLength <- 9L # for all scores
   minSignal <- 10L # for all scores
   minScoreNC <- 50L # for score normalized cleavage
   minScoreSR <- 0.50 # for score stop ratio
@@ -95,7 +176,7 @@ setClass("ModAlkAnilineSeq",
   args
 }
 
-#' @name ModAlkAnilineSeq
+#' @rdname ModAlkAnilineSeq-functions
 #' @export
 setReplaceMethod(f = "settings", 
                  signature = signature(x = "ModAlkAnilineSeq"),
@@ -105,15 +186,6 @@ setReplaceMethod(f = "settings",
                    x@arguments[names(value)] <- unname(value)
                    x
                  })
-
-# constructors -----------------------------------------------------------------
-
-#' @rdname ModAlkAnilineSeq
-#' @export
-ModInosine <- function(x, annotation = NA, sequences = NA, seqinfo = NA, ...){
-  Modifier("ModAlkAnilineSeq", x = x, annotation = annotation, 
-           sequences = sequences, seqinfo = seqinfo, ...)
-}
 
 # functions --------------------------------------------------------------------
 
@@ -175,7 +247,7 @@ ModInosine <- function(x, annotation = NA, sequences = NA, seqinfo = NA, ...){
   data
 }
 
-#' @name ModAlkAnilineSeq
+#' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
   f = "aggregate", 
@@ -267,7 +339,7 @@ setMethod(
   unname(unlist(modifications))
 }
 
-#' @rdname ModAlkAnilineSeq
+#' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod("modify",
           signature = c(x = "ModAlkAnilineSeq"),
@@ -293,6 +365,6 @@ setClass("ModSetAlkAnilineSeq",
 #' @export
 ModSetAlkAnilineSeq <- function(x, annotation = NA, sequences = NA,
                                 seqinfo = NA){
-  ModifierSet("ModAlkAnilineSeq", x, annotation = annotation,
-              sequences = sequences, seqinfo = seqinfo)
+  RNAmodR::ModifierSet("ModAlkAnilineSeq", x, annotation = annotation,
+                       sequences = sequences, seqinfo = seqinfo)
 }

@@ -1,1 +1,1 @@
-# modRNA-AlkAnilineSeq
+# RNAmodR.AlkAnilineSeq
