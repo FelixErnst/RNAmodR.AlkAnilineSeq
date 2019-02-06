@@ -32,7 +32,7 @@ NULL
 #' class is used as well, to check, whether the base is can be called according
 #' to the expected sequence identity.
 #' 
-#' Only samples named \code{treated are used for this analysis}. Normalization 
+#' Only samples named \code{treated} are used for this analysis. Normalization 
 #' to untreated samples is currently not used.
 #' 
 #' @param x the input which can be of the different types depending on whether
@@ -276,8 +276,6 @@ setMethod(
 }
 
 .find_aas <- function(x){
-  message("Searching for m7G/m3C/D ...")
-  #
   letters <- IRanges::CharacterList(strsplit(as.character(sequences(x)),""))
   grl <- ranges(x)
   # get the aggregate data
