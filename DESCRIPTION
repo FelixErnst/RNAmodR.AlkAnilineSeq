@@ -19,7 +19,15 @@ Depends:
     RNAmodR
 Imports:
     methods,
-    assertive
+    assertive,
+    S4Vectors,
+    IRanges,
+    BiocGenerics,
+    GenomicRanges,
+    GenomicFeatures,
+    Rsamtools,
+    rtracklayer,
+    Gviz
 Suggests:
     BiocStyle,
     knitr,

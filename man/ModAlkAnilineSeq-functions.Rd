@@ -12,6 +12,7 @@
 \alias{settings<-,ModAlkAnilineSeq-method}
 \alias{aggregate,ModAlkAnilineSeq-method}
 \alias{modify,ModAlkAnilineSeq-method}
+\alias{getDataTrack,ModAlkAnilineSeq-method}
 \alias{visualizeDataByCoord,ModAlkAnilineSeq,GRanges-method}
 \alias{visualizeData,ModAlkAnilineSeq-method}
 \alias{visualizeDataByCoord,ModSetAlkAnilineSeq,GRanges-method}
@@ -23,6 +24,8 @@
 \S4method{aggregate}{ModAlkAnilineSeq}(x, force = FALSE)
 
 \S4method{modify}{ModAlkAnilineSeq}(x, force = FALSE)
+
+\S4method{getDataTrack}{ModAlkAnilineSeq}(x, name, type, ...)
 
 \S4method{visualizeDataByCoord}{ModAlkAnilineSeq,GRanges}(x, coord,
   type = c("ends", "scoreNC", "scoreSR"), window.size = 15L, ...)

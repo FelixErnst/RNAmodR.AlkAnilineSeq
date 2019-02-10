@@ -293,15 +293,15 @@ setMethod(
     function(m,l,r,s){
       m <- m[!is.na(m$scoreNC) &
                !is.na(m$scoreSR) &
-               !is.na(m$ends),]
+               !is.na(m$ends),,drop=FALSE]
       if(nrow(m) == 0L) return(NULL)
-      m <- m[s,]
+      m <- m[s,,drop=FALSE]
       if(nrow(m) == 0L) return(NULL)
       m <- m[mapply(Reduce,
                     rep(scoreOperator,nrow(m)),
                     m$scoreNC >= minScoreNC,
                     m$scoreSR >= minScoreSR,
-                    m$baseScore >= 0.9),]
+                    m$baseScore >= 0.9),,drop=FALSE]
       if(nrow(m) == 0L) return(NULL)
       ansm7G <- RNAmodR:::.constructModRanges(
         r,
@@ -343,7 +343,7 @@ setMethod(
 #' @export
 setMethod("modify",
           signature = c(x = "ModAlkAnilineSeq"),
-          function(x, force){
+          function(x, force = FALSE){
             # get the aggregate data
             x <- aggregate(x, force)
             x@modifications <- .find_aas(x)

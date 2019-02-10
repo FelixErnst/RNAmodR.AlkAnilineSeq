@@ -30,6 +30,8 @@ RNAMODR_AAS_PLOT_DATA_COLOURS <- c(ends = "#FBB4AE",
   input
 }
 
+#' @rdname ModAlkAnilineSeq-functions
+#' @export
 setMethod(
   f = "getDataTrack",
   signature = signature(x = "ModAlkAnilineSeq"),
