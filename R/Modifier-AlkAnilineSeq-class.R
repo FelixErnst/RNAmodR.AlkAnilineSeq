@@ -291,7 +291,6 @@ setMethod(
   # find modifications
   modifications <- mapply(
     function(m,l,r,s){
-      rownames(m) <- seq_len(BiocGenerics::width(r))
       m <- m[!is.na(m$scoreNC) &
                !is.na(m$scoreSR) &
                !is.na(m$ends),]

@@ -81,7 +81,7 @@ Heatmap
 sequence specific result
 
 ```{r}
-
+visualizeData(msaas, "1", from = 1550L, to = 1600L)
 ```
 
 # Session info
