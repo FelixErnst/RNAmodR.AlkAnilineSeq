@@ -62,6 +62,6 @@ classes.
 \itemize{
 \item{\code{colour} - }{a named character vector of \code{length = 4} 
 for the colours of the individual histograms. The names are expected to be 
-\code{c("ends","scoreA","scoreB","scoreRMS")}}
+\code{c("scoreNC","scoreSR")}}
 }
 }

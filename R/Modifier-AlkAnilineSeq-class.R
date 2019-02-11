@@ -60,6 +60,8 @@ NULL
 #' m3C and D positions de novo (default: \code{minScoreNC = 50L})}
 #' \item{minScoreSR:} {minimum for score (stop ration) to identify m7G, m3C and D
 #' positions de novo (default: \code{minScoreSR = 0.5})}
+#' \item{minScoreBaseScore:} {minimum score for base calling (0.0-1.0)  
+#' (default: \code{minScoreSR = 0.9})}
 #' \item{scoreOperator:} {how the minimal score should be used as logical 
 #' operator. "&" requires all minimal values to be exceeded, whereas "|" detects
 #' positions, if at least one minimal values is exceeded (default: 
@@ -122,7 +124,7 @@ ModAlkAnilineSeq <- function(x, annotation = NA, sequences = NA, seqinfo = NA,
 #' \itemize{
 #' \item{\code{colour} - }{a named character vector of \code{length = 4} 
 #' for the colours of the individual histograms. The names are expected to be 
-#' \code{c("ends","scoreA","scoreB","scoreRMS")}}
+#' \code{c("scoreNC","scoreSR")}}
 #' }
 #' 
 #' @importMethodsFrom RNAmodR modify aggregate settings visualizeData 
@@ -134,6 +136,7 @@ NULL
   minSignal <- 10L # for all scores
   minScoreNC <- 50L # for score normalized cleavage
   minScoreSR <- 0.50 # for score stop ratio
+  minScoreBaseScore <- 0.9 # for base scoring
   scoreOperator <- "&"
   if(!is.null(input[["minLength"]])){
     minLength <- input[["minLength"]]
@@ -165,10 +168,18 @@ NULL
            call. = FALSE)
     }
   }
-  if(!is.null(input[["scoreOperator"]])){
-    scoreOperator <- input[["scoreOperator"]]
-    if(!(scoreOperator %in% c("|","&"))){
-      stop("'scoreOperator' must be either '|' or '&'.",
+  if(!is.null(input[["minScoreSR"]])){
+    minScoreSR <- input[["minScoreSR"]]
+    if(!is.numeric(minScoreSR) | minScoreSR < 0 | minScoreSR > 1 ){
+      stop("'minScoreSR' must be numeric with a value between 0 and 1.",
+           call. = FALSE)
+    }
+  }
+  if(!is.null(input[["minScoreBaseScore"]])){
+    minScoreBaseScore <- input[["minScoreBaseScore"]]
+    if(!is.numeric(minScoreBaseScore) | minScoreBaseScore < 0 | 
+       minScoreBaseScore > 1 ){
+      stop("'minScoreBaseScore' must be numeric with a value between 0 and 1.",
            call. = FALSE)
     }
   }
@@ -178,6 +189,7 @@ NULL
                  minSignal = minSignal,
                  minScoreNC = minScoreNC,
                  minScoreSR = minScoreSR,
+                 minScoreBaseScore = minScoreBaseScore,
                  scoreOperator = scoreOperator))
   args
 }
@@ -286,6 +298,7 @@ setMethod(
   minSignal <- settings(x,"minSignal")
   minScoreNC <- settings(x,"minScoreNC")
   minScoreSR <- settings(x,"minScoreSR")
+  minScoreBaseScore <- settings(x,"minScoreBaseScore")
   scoreOperator <- settings(x,"scoreOperator")
   # construct logical vector for passing the minSignal threshold
   signal <- IRanges::LogicalList(unname(mod@unlistData$ends >= minSignal))
@@ -303,7 +316,7 @@ setMethod(
                     rep(scoreOperator,nrow(m)),
                     m$scoreNC >= minScoreNC,
                     m$scoreSR >= minScoreSR,
-                    m$baseScore >= 0.9),,drop=FALSE]
+                    m$baseScore >= minScoreBaseScore),,drop=FALSE]
       if(nrow(m) == 0L) return(NULL)
       ansm7G <- RNAmodR:::.constructModRanges(
         r,
@@ -334,10 +347,18 @@ setMethod(
     letters,
     grl,
     signal)
-  modifications <- GenomicRanges::GRangesList(
-    modifications[!vapply(modifications,
-                          is.null,
-                          logical(1))])
+  f <- !vapply(modifications,
+               is.null,
+               logical(1))
+  modifications <- mapply(
+    function(m,name){
+      m$Parent <- name
+      m
+    },
+    modifications[f],
+    names(grl)[f],
+    SIMPLIFY = FALSE)
+  modifications <- GenomicRanges::GRangesList(modifications)
   unname(unlist(modifications))
 }
 

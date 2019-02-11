@@ -8,6 +8,6 @@ test_that("AlkAnilineSeq base score",{
                              means.treated.C = c("0","100"))
   x <- IRanges::SplitDataFrameList(df,df)
   seq <- Biostrings::RNAStringSet(c("AG","CU"))
-  actual <- RNAmodR.AlkAnilineSeq:::.calculate_base_score(x,seq)
+  actual <- RNAmodR.AlkAnilineSeq:::.selected_base_score(x,seq)
   expect_equal(actual,c(0,0,0,100))
 })

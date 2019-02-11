@@ -44,6 +44,8 @@ value may need to be used}
 m3C and D positions de novo (default: \code{minScoreNC = 50L})}
 \item{minScoreSR:} {minimum for score (stop ration) to identify m7G, m3C and D
 positions de novo (default: \code{minScoreSR = 0.5})}
+\item{minScoreBaseScore:} {minimum score for base calling (0.0-1.0)  
+(default: \code{minScoreSR = 0.9})}
 \item{scoreOperator:} {how the minimal score should be used as logical 
 operator. "&" requires all minimal values to be exceeded, whereas "|" detects
 positions, if at least one minimal values is exceeded (default: 

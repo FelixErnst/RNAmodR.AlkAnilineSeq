@@ -22,13 +22,25 @@ BiocStyle::markdown(css.files = c('custom.css'))
 
 # Introduction
 
+7-methyl guanosine (m7G), 3-methyl cytidine (m3C) and Dihydrouridine (D)
+are commonly found in rRNA and tRNA and can be detected classically by
+primer extension analysis. However, since the modifications do not interfere
+with Watson-Crick base pairing, a specific chemical treatment needs to be 
+employed to cause strand breaks specifically at the modified positions. 
+Initially, this involved a sodium borhydride treatment to create abasic sites 
+and cleaving the RNA at abasic sites with aniline. 
 
+This classical protocol was converted to a high throughput sequencing method 
+call AlkAnilineSeq and allows modified position be detected by an accumulation 
+of 5'-ends at the N+1 position [[@Marchand.2018]](#References). It was found, 
+that m3C is susceptible to this treatment, which allows m7G, m3C and D to be 
+detected by the same method from the same data sets, since the identify of the 
+unmodified nucleotide informs about the three modified nucleotides.
 
-
-
-
-
-
+The `ModAlkAnilineSeq` class uses the the `NormEnd5SequenceData` class to store
+and aggregate data along the transcripts. The calculated scores follow the 
+nomenclature of [[@Marchand.2018]](#References) with the names `scoreNC`
+(default) and `scoreSR`.
 
 ```{r, echo = FALSE}
 suppressPackageStartupMessages({
@@ -47,42 +59,73 @@ library(RNAmodR.AlkAnilineSeq)
 
 # Example workflow
 
-Loading files
+The example workflow is limited to 18S rRNA and some tRNA from *S.cerevisiae*.
+As annotation data either a gff file or a `TxDb` object and for sequence data 
+a fasta file or a `BSgenome` object can be used. The data is provided as bam 
+files.
+
 ```{r}
 RNAmodR.files <- RNAmodR.Data::RNAmodR.files
 annotation <- GFF3File(RNAmodR.files[["example_AAS.gff3"]])
 sequences <- FaFile(RNAmodR.files[["example_AAS.fasta"]])
-files <- list("SampleSet1" = c(treated = RNAmodR.files[["example_wt_1.bam"]],
-                               treated = RNAmodR.files[["example_wt_2.bam"]],
-                               treated = RNAmodR.files[["example_wt_3.bam"]]),
-              "SampleSet2" = c(treated = RNAmodR.files[["example_bud23_1.bam"]],
-                               treated = RNAmodR.files[["example_bud23_2.bam"]]),
-              "SampleSet3" = c(treated = RNAmodR.files[["example_trm8_1.bam"]],
-                               treated = RNAmodR.files[["example_trm8_2.bam"]]))
+files <- list("wt" = c(treated = RNAmodR.files[["example_wt_1.bam"]],
+                       treated = RNAmodR.files[["example_wt_2.bam"]],
+                       treated = RNAmodR.files[["example_wt_3.bam"]]),
+              "Bud23del" = c(treated = RNAmodR.files[["example_bud23_1.bam"]],
+                             treated = RNAmodR.files[["example_bud23_2.bam"]]),
+              "Trm8del" = c(treated = RNAmodR.files[["example_trm8_1.bam"]],
+                            treated = RNAmodR.files[["example_trm8_2.bam"]]))
 ```
 
-Analysis of data
+The analysis is triggered by the construction of a `ModSetAlkAnilineSeq` object.
+Internally parallelization is used via the `BiocParallel` package, which would
+allow optimization depending on number/size of input files (number of samples,
+number of replicates, number of transcripts, etc).
 
 ```{r}
 msaas <- ModSetAlkAnilineSeq(files, annotation = annotation, sequences = sequences)
 ```
 
+As expected the m7G1575 is missing from the Bud23del samples.
+
+```{r}
+mod <- modifications(msaas)
+lapply(mod,head, n = 2)
+```
+
 # Visualizing the results
 
-```{r}
+As outlined in the `RNAmodR` package we can compare the samples using the 
+`plotCompareByCoord` to prepare a heatmap. For this we select some position
+from the found modifications. In addition we prepare an alias table.
 
+```{r}
+coord <- mod[[1]][c(1:3,5:7,9,10)]
+alias <- data.frame(tx_id = c(1,3,5,6,7,8,10,11),
+                    name = c("18S rRNA","tF(GAA)B","tG(GCC)B","tT(AGT)B",
+                             "tQ(TTG)B","tC(GCA)B","tS(CGA)C","tV(AAC)E1"),
+                    stringsAsFactors = FALSE)
 ```
 
-Heatmap
-
-```{r}
-
+```{r plot1, fig.cap="Heatmap showing Stop ratio scores for detected m7G, m3C and D positions.", fig.asp=1}
+plotCompareByCoord(msaas, coord, score = "scoreSR", alias = alias,
+                   normalize = TRUE)
 ```
 
-sequence specific result
+```{r plot2, fig.cap="Heatmap showing Stop ratio scores for detected m7G1575 on the 18S rRNA.", fig.asp=0.7}
+plotCompareByCoord(msaas, coord[1], score = "scoreSR", alias = alias)
+```
 
-```{r}
+In addition, the aggregate data along the transcript visualized as well.
+
+```{r plot3, fig.cap="", fig.asp=1.5}
 visualizeData(msaas, "1", from = 1550L, to = 1600L)
+```
+
+This includes raw data as well.
+
+```{r plot4, fig.cap="", fig.asp=2}
+visualizeData(msaas, "1", from = 1550L, to = 1600L, seqdata = TRUE)
 ```
 
 # Session info
