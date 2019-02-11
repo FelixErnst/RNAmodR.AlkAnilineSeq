@@ -195,13 +195,15 @@ setReplaceMethod(f = "settings",
 
 # functions --------------------------------------------------------------------
 
-.calculate_base_score <- function(x,seq){
+.selected_base_score <- function(x,seq){
   seq <- IRanges::CharacterList(strsplit(as.character(seq),""))
   data <- x@unlistData
+  # the order of baseSelect and baseColumns must be compatible
+  # "conversion" T to U is performed with this
   baseSelect <- S4Vectors::DataFrame("G" = unlist(seq) == "G",
-                          "A" = unlist(seq) == "A",
-                          "U" = unlist(seq) == "U",
-                          "C" = unlist(seq) == "C")
+                                     "A" = unlist(seq) == "A",
+                                     "U" = unlist(seq) == "U",
+                                     "C" = unlist(seq) == "C")
   baseColumns <- which(colnames(data) %in% c("means.treated.G",
                                              "means.treated.A",
                                              "means.treated.T",
@@ -238,7 +240,7 @@ setReplaceMethod(f = "settings",
   # get the PileupSequenceData
   # calculate base score
   pileupData <- mod[["PileupSequenceData"]]
-  score <- .calculate_base_score(pileupData,sequences(x))
+  score <- .selected_base_score(pileupData,sequences(x))
   # subset to columns needed
   data <- endData@unlistData[,c("means.treated.ends",
                                 "means.treated.tx",
