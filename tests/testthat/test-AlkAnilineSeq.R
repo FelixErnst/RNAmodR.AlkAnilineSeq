@@ -12,6 +12,7 @@ test_that("AlkAnilineSeq:",{
                         "minSignal",
                         "minScoreNC",
                         "minScoreSR",
+                        "minScoreBaseScore",
                         "scoreOperator"))
   expect_error(RNAmodR.AlkAnilineSeq:::.norm_aas_args(list(minCoverage = 10)))
   expect_equal(RNAmodR.AlkAnilineSeq:::.norm_aas_args(list(minCoverage = 10L)),

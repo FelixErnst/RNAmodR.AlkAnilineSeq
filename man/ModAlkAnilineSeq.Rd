@@ -68,15 +68,16 @@ unmodified nucleotide is different for the three modified nucleotides, they
 modification can be detected at the same time from the same samples.
 
 The \code{ModAlkAnilineSeq} class uses the  
-\code{\link[RNAmodR:NormEndSequenceData]{NormEnd5SequenceData}}
+\code{\link[RNAmodR:NormEndSequenceData-class]{NormEnd5SequenceData}}
 class to store and aggregate data along the transcripts. This includes 
 normalized values against the whole transcript (normalzed cleavage) and 
 normalized values against the overlapping reads (stop ratio), which are used
 to score for modified positions.
 
-In addition the \code{\link[RNAmodR:PileupSequenceData]{PileupSequenceData}}
-class is used as well, to check, whether the base is can be called according
-to the expected sequence identity.
+In addition the 
+\code{\link[RNAmodR:PileupSequenceData-class]{PileupSequenceData}} class is
+used as well, to check, whether the base is can be called according to the
+expected sequence identity.
 
 Only samples named \code{treated} are used for this analysis. Normalization 
 to untreated samples is currently not used.
