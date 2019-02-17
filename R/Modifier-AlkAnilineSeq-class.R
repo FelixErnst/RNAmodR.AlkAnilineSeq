@@ -68,7 +68,7 @@ NULL
 #' positions, if at least one minimal values is exceeded (default: 
 #' \code{scoreOperator = "&"}).}
 #' \item{other arguments} {which are passed on to 
-#' \code{\link[RNAmodR:EndSequenceData]{End5SequenceData}}}
+#' \code{\link[RNAmodR:EndSequenceData-class]{End5SequenceData}}}
 #' }
 #' 
 #' @references 
@@ -398,8 +398,8 @@ setClass("ModSetAlkAnilineSeq",
 
 #' @rdname ModAlkAnilineSeq
 #' @export
-ModSetAlkAnilineSeq <- function(x, annotation = NA, sequences = NA,
-                                seqinfo = NA){
+ModSetAlkAnilineSeq <- function(x, annotation = NA, sequences = NA, 
+                                seqinfo = NA, ...){
   RNAmodR::ModifierSet("ModAlkAnilineSeq", x, annotation = annotation,
-                       sequences = sequences, seqinfo = seqinfo)
+                       sequences = sequences, seqinfo = seqinfo, ...)
 }
