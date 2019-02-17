@@ -243,7 +243,7 @@ setReplaceMethod(f = "settings",
 
 .aggregate_aas <- function(x){
   message("Aggregating data and calculating scores...")
-  mod <- aggregate(seqData(x), condition = "Treated")
+  mod <- aggregate(sequenceData(x), condition = "Treated")
   if(is.null(names(mod))){
     names(mod) <- vapply(mod,class,character(1))
   }
