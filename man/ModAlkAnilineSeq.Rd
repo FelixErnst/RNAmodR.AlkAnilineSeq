@@ -12,7 +12,8 @@
 ModAlkAnilineSeq(x, annotation = NA, sequences = NA, seqinfo = NA,
   ...)
 
-ModSetAlkAnilineSeq(x, annotation = NA, sequences = NA, seqinfo = NA)
+ModSetAlkAnilineSeq(x, annotation = NA, sequences = NA, seqinfo = NA,
+  ...)
 }
 \arguments{
 \item{x}{the input which can be of the different types depending on whether
@@ -51,7 +52,7 @@ operator. "&" requires all minimal values to be exceeded, whereas "|" detects
 positions, if at least one minimal values is exceeded (default: 
 \code{scoreOperator = "&"}).}
 \item{other arguments} {which are passed on to 
-\code{\link[RNAmodR:EndSequenceData]{End5SequenceData}}}
+\code{\link[RNAmodR:EndSequenceData-class]{End5SequenceData}}}
 }}
 }
 \description{
