@@ -379,12 +379,10 @@ setMethod(
   signal <- IRanges::LogicalList(unname(mod@unlistData$ends >= minSignal))
   signal@partitioning <- mod@partitioning
   # find modifications
-  browser()
   modifications <- .find_aas_modifications_in_data(mod, letters, grl, signal,
                                                    minScoreNC, minScoreSR,
                                                    minScoreBaseScore,
                                                    scoreOperator)
-  message("done.")
   unname(unlist(modifications))
 }
 
