@@ -268,26 +268,19 @@ setReplaceMethod(f = "settings",
   # add base score
   data$baseScore <- score
   # split and return
-  data <- IRanges::SplitDataFrameList(data)
-  data@partitioning <- endData@partitioning
-  data
+  ans <- relist(data, endData@partitioning)
+  rownames(ans) <- IRanges::CharacterList(RNAmodR:::.seqs_rl_strand(ranges(x)))
+  ans
 }
 
 #' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
-  f = "aggregate", 
+  f = "aggregateData", 
   signature = signature(x = "ModAlkAnilineSeq"),
   definition = 
-    function(x, force = FALSE){
-      if(missing(force)){
-        force <- FALSE
-      }
-      if(!hasAggregateData(x) || force){
-        x@aggregate <- .aggregate_aas(x)
-      }
-      x <- callNextMethod()
-      x
+    function(x){
+      .aggregate_aas(x)
     }
 )
 
@@ -368,7 +361,7 @@ setMethod(
   grl <- ranges(x)
   letters <- IRanges::CharacterList(strsplit(as.character(sequences(x)),""))
   # get the aggregate data
-  mod <- aggregateData(x)
+  mod <- getAggregateData(x)
   # set up some arguments
   minSignal <- settings(x,"minSignal")
   minScoreNC <- settings(x,"minScoreNC")
@@ -388,15 +381,10 @@ setMethod(
 
 #' @rdname ModAlkAnilineSeq-functions
 #' @export
-setMethod("modify",
+setMethod("findMod",
           signature = c(x = "ModAlkAnilineSeq"),
-          function(x, force = FALSE){
-            if(!x@aggregateValidForCurrentArguments){
-              x <- aggregate(x, force = TRUE)
-            }
-            x@modifications <- .find_aas_modifications(x)
-            x <- callNextMethod()
-            x
+          function(x){
+            .find_aas_modifications(x)
           }
 )
 

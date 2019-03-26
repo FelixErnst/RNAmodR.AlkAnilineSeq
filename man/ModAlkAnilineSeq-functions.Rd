@@ -10,8 +10,8 @@
 \alias{visualizeData}
 \alias{visualizeDataByCoord}
 \alias{settings<-,ModAlkAnilineSeq-method}
-\alias{aggregate,ModAlkAnilineSeq-method}
-\alias{modify,ModAlkAnilineSeq-method}
+\alias{aggregateData,ModAlkAnilineSeq-method}
+\alias{findMod,ModAlkAnilineSeq-method}
 \alias{getDataTrack,ModAlkAnilineSeq-method}
 \alias{visualizeDataByCoord,ModAlkAnilineSeq,GRanges-method}
 \alias{visualizeData,ModAlkAnilineSeq-method}
@@ -21,9 +21,9 @@
 \usage{
 \S4method{settings}{ModAlkAnilineSeq}(x) <- value
 
-\S4method{aggregate}{ModAlkAnilineSeq}(x, force = FALSE)
+\S4method{aggregateData}{ModAlkAnilineSeq}(x)
 
-\S4method{modify}{ModAlkAnilineSeq}(x, force = FALSE)
+\S4method{findMod}{ModAlkAnilineSeq}(x)
 
 \S4method{getDataTrack}{ModAlkAnilineSeq}(x, name, type, ...)
 
@@ -46,10 +46,10 @@ details see also the man pages for the functions mentioned below.}
 
 \item{value}{See \code{\link[RNAmodR:Modifier-class]{settings}}}
 
-\item{force}{See \code{\link[RNAmodR:aggregate]{aggregate}}}
-
 \item{coord, name, from, to, type, window.size, ...}{See 
 \code{\link[RNAmodR:visualizeData]{visualizeData}}.}
+
+\item{force}{See \code{\link[RNAmodR:aggregate]{aggregate}}}
 }
 \description{
 All of the functions of \code{\link[RNAmodR:Modifier-class]{Modifier}} and
