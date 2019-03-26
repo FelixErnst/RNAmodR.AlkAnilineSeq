@@ -296,26 +296,13 @@ setMethod(
        scoreSR = data$scoreSR)
 }
 
-.find_aas <- function(x){
-  if(!hasAggregateData(x)){
-    stop("Something went wrong.")
-  }
-  letters <- IRanges::CharacterList(strsplit(as.character(sequences(x)),""))
-  grl <- ranges(x)
-  # get the aggregate data
-  mod <- aggregateData(x)
-  # set up some arguments
-  minSignal <- settings(x,"minSignal")
-  minScoreNC <- settings(x,"minScoreNC")
-  minScoreSR <- settings(x,"minScoreSR")
-  minScoreBaseScore <- settings(x,"minScoreBaseScore")
-  scoreOperator <- settings(x,"scoreOperator")
-  # construct logical vector for passing the minSignal threshold
-  signal <- IRanges::LogicalList(unname(mod@unlistData$ends >= minSignal))
-  signal@partitioning <- mod@partitioning
-  # find modifications
+.find_aas_modifications_in_data <- function(mod, letters, grl, signal,
+                                            minScoreNC, minScoreSR,
+                                            minScoreBaseScore,
+                                            scoreOperator){
   modifications <- mapply(
     function(m,l,r,s){
+      pos <- rownames(m)
       m <- m[!is.na(m$scoreNC) &
                !is.na(m$scoreSR) &
                !is.na(m$ends),,drop=FALSE]
@@ -328,23 +315,27 @@ setMethod(
                     m$scoreSR >= minScoreSR,
                     m$baseScore >= minScoreBaseScore),,drop=FALSE]
       if(nrow(m) == 0L) return(NULL)
-      ansm7G <- RNAmodR:::.constructModRanges(
+      l <- l[which(rownames(m) %in% pos)]
+      if(!any(l %in% c("G","C","U"))){
+        return(NULL)
+      }
+      ansm7G <- RNAmodR:::constructModRanges(
         r,
-        m[l[as.integer(rownames(m))] == "G",],
+        m[l == "G",],
         modType = "m7G",
         scoreFun = RNAmodR.AlkAnilineSeq:::.get_aas_scores,
         source = "RNAmodR.AlkAnilineSeq",
         type = "RNAMOD")
-      ansD <- RNAmodR:::.constructModRanges(
+      ansD <- RNAmodR:::constructModRanges(
         r,
-        m[l[as.integer(rownames(m))] == "U",],
+        m[l == "U",],
         modType = "D",
         scoreFun = RNAmodR.AlkAnilineSeq:::.get_aas_scores,
         source = "RNAmodR.AlkAnilineSeq",
         type = "RNAMOD")
-      ansm3C <- RNAmodR:::.constructModRanges(
+      ansm3C <- RNAmodR:::constructModRanges(
         r,
-        m[l[as.integer(rownames(m))] == "C",],
+        m[l == "C",],
         modType = "m3C",
         scoreFun = RNAmodR.AlkAnilineSeq:::.get_aas_scores,
         source = "RNAmodR.AlkAnilineSeq",
@@ -357,9 +348,7 @@ setMethod(
     letters,
     grl,
     signal)
-  f <- !vapply(modifications,
-               is.null,
-               logical(1))
+  f <- !vapply(modifications, is.null, logical(1))
   modifications <- mapply(
     function(m,name){
       m$Parent <- rep(name,length(m))
@@ -369,6 +358,32 @@ setMethod(
     names(grl)[f],
     SIMPLIFY = FALSE)
   modifications <- GenomicRanges::GRangesList(modifications)
+  modifications
+}
+
+.find_aas_modifications <- function(x){
+  if(!hasAggregateData(x)){
+    stop("Something went wrong.")
+  }
+  grl <- ranges(x)
+  letters <- IRanges::CharacterList(strsplit(as.character(sequences(x)),""))
+  # get the aggregate data
+  mod <- aggregateData(x)
+  # set up some arguments
+  minSignal <- settings(x,"minSignal")
+  minScoreNC <- settings(x,"minScoreNC")
+  minScoreSR <- settings(x,"minScoreSR")
+  minScoreBaseScore <- settings(x,"minScoreBaseScore")
+  scoreOperator <- settings(x,"scoreOperator")
+  # construct logical vector for passing the minSignal threshold
+  signal <- IRanges::LogicalList(unname(mod@unlistData$ends >= minSignal))
+  signal@partitioning <- mod@partitioning
+  # find modifications
+  browser()
+  modifications <- .find_aas_modifications_in_data(mod, letters, grl, signal,
+                                                   minScoreNC, minScoreSR,
+                                                   minScoreBaseScore,
+                                                   scoreOperator)
   message("done.")
   unname(unlist(modifications))
 }
@@ -381,7 +396,7 @@ setMethod("modify",
             if(!x@aggregateValidForCurrentArguments){
               x <- aggregate(x, force = TRUE)
             }
-            x@modifications <- .find_aas(x)
+            x@modifications <- .find_aas_modifications(x)
             x <- callNextMethod()
             x
           }
