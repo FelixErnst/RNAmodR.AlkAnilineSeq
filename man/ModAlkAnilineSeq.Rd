@@ -68,6 +68,8 @@ accumulation of 5'-ends at the N+1 position. Since the identify of the
 unmodified nucleotide is different for the three modified nucleotides, they
 modification can be detected at the same time from the same samples.
 
+\code{dataType} is \code{c("NormEnd3SequenceData","PileupSequenceData")}:
+
 The \code{ModAlkAnilineSeq} class uses the  
 \code{\link[RNAmodR:NormEndSequenceData-class]{NormEnd5SequenceData}}
 class to store and aggregate data along the transcripts. This includes 
