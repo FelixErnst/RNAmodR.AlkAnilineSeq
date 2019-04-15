@@ -310,7 +310,7 @@ setMethod(
                     m$scoreSR >= minScoreSR,
                     m$baseScore >= minScoreBaseScore),,drop=FALSE]
       if(nrow(m) == 0L) return(NULL)
-      l <- l[which(rownames(m) %in% pos)]
+      l <- l[which(pos %in% rownames(m))]
       if(!any(l %in% c("G","C","U"))){
         return(NULL)
       }
