@@ -24,7 +24,6 @@ Imports:
     methods,
     S4Vectors,
     IRanges,
-    Biostrings,
     BiocGenerics,
     GenomicRanges,
     Gviz

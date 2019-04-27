@@ -88,13 +88,9 @@ NULL
 #' library(rtracklayer)
 #' annotation <- GFF3File(RNAmodR.Data.example.AAS.gff3())
 #' sequences <- RNAmodR.Data.example.AAS.fasta()
-#' files <- list("wt" = c(treated = RNAmodR.Data.example.wt.1(),
-#'                        treated = RNAmodR.Data.example.wt.2(),
-#'                        treated = RNAmodR.Data.example.wt.3()),
-#'               "Bud23del" = c(treated = RNAmodR.Data.example.bud23.1(),
-#'                              treated = RNAmodR.Data.example.bud23.2()),
-#'               "Trm8del" = c(treated = RNAmodR.Data.example.trm8.1(),
-#'                             treated = RNAmodR.Data.example.trm8.2()))
+#' files <- list("wt" = c(treated = RNAmodR.Data.example.wt.1()),
+#'               "Bud23del" = c(treated = RNAmodR.Data.example.bud23.1()),
+#'               "Trm8del" = c(treated = RNAmodR.Data.example.trm8.1()))
 #' # Creating a Modifier object of type ModRiboMethSeq
 #' maas <- ModAlkAnilineSeq(files[[1]], annotation = annotation,
 #'                          sequences = sequences)
