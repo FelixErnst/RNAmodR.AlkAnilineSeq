@@ -27,16 +27,13 @@ Imports:
     Biostrings,
     BiocGenerics,
     GenomicRanges,
-    GenomicFeatures,
-    Rsamtools,
-    rtracklayer,
     Gviz
 Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
     testthat,
-    sessioninfo,
+    rtracklayer,
     RNAmodR.Data
 Collate: 
     'RNAmodR.AlkAnilineSeq.R'

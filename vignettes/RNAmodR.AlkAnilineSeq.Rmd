@@ -45,16 +45,16 @@ nomenclature of [[@Marchand.2018]](#References) with the names `scoreNC`
 ```{r, echo = FALSE}
 suppressPackageStartupMessages({
   library(rtracklayer)
-  library(Rsamtools)
-  library(GenomicFeatures)
+  library(GenomicRanges)
   library(RNAmodR.AlkAnilineSeq)
+  library(RNAmodR.Data)
 })
 ```
 ```{r, eval = FALSE}
 library(rtracklayer)
-library(Rsamtools)
-library(GenomicFeatures)
+library(GenomicRanges)
 library(RNAmodR.AlkAnilineSeq)
+library(RNAmodR.Data)
 ```
 
 # Example workflow
@@ -64,17 +64,16 @@ As annotation data either a gff file or a `TxDb` object and for sequence data
 a fasta file or a `BSgenome` object can be used. The data is provided as bam 
 files.
 
-```{r aas}
-RNAmodR.files <- RNAmodR.Data::RNAmodR.files
-annotation <- GFF3File(RNAmodR.files[["example_AAS.gff3"]])
-sequences <- FaFile(RNAmodR.files[["example_AAS.fasta"]])
-files <- list("wt" = c(treated = RNAmodR.files[["example_wt_1.bam"]],
-                       treated = RNAmodR.files[["example_wt_2.bam"]],
-                       treated = RNAmodR.files[["example_wt_3.bam"]]),
-              "Bud23del" = c(treated = RNAmodR.files[["example_bud23_1.bam"]],
-                             treated = RNAmodR.files[["example_bud23_2.bam"]]),
-              "Trm8del" = c(treated = RNAmodR.files[["example_trm8_1.bam"]],
-                            treated = RNAmodR.files[["example_trm8_2.bam"]]))
+```{r, echo=FALSE}
+annotation <- GFF3File(RNAmodR.Data.example.AAS.gff3())
+sequences <- RNAmodR.Data.example.AAS.fasta()
+files <- list("wt" = c(treated = RNAmodR.Data.example.wt.1(),
+                       treated = RNAmodR.Data.example.wt.2(),
+                       treated = RNAmodR.Data.example.wt.3()),
+              "Bud23del" = c(treated = RNAmodR.Data.example.bud23.1(),
+                             treated = RNAmodR.Data.example.bud23.2()),
+              "Trm8del" = c(treated = RNAmodR.Data.example.trm8.1(),
+                            treated = RNAmodR.Data.example.trm8.2()))
 ```
 
 The analysis is triggered by the construction of a `ModSetAlkAnilineSeq` object.
@@ -112,26 +111,28 @@ plotCompareByCoord(msaas, coord, score = "scoreSR", alias = alias,
                    normalize = TRUE)
 ```
 
-```{r plot2, fig.cap="Heatmap showing Stop ratio scores for detected m7G1575 on the 18S rRNA.", fig.asp=0.7}
+```{r plot2, fig.cap="Heatmap showing Stop ratio scores for detected m7G1575 on the 18S rRNA.", fig.asp=0.5}
 plotCompareByCoord(msaas, coord[1], score = "scoreSR", alias = alias)
 ```
 
 In addition, the aggregate data along the transcript visualized as well.
 
-```{r plot3, fig.cap="", fig.asp=1.5}
+```{r plot3, fig.cap="", fig.asp=1}
 visualizeData(msaas, "1", from = 1550L, to = 1600L)
 ```
 
 This includes raw data as well.
 
-```{r plot4, fig.cap="", fig.asp=2}
+```{r plot4, fig.cap="", fig.asp=1}
 visualizeData(msaas, "1", from = 1550L, to = 1600L, seqdata = TRUE)
 ```
 
 # Session info
 
 ```{r, sessioninfo}
-sessioninfo::session_info()
+sessionInfo()
 ```
+
+<a name="References"></a>
 
 # References

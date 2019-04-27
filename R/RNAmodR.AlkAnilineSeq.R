@@ -22,5 +22,14 @@ NULL
 #' @import GenomicRanges
 #' @import Gviz
 NULL
-requireNamespace("IRanges")
 requireNamespace("RNAmodR")
+
+#' @name RNAmodR.AlkAnilineSeq-datasets
+#' @title Example data in the RNAmodR.AlkAnilineSeq package
+#' @description 
+#' This contains an example ModifierSet object of type ModSetAlkAnilineSeq
+#' @docType data
+#' @usage msrms
+#' @format a \code{ModSetAlkAnilineSeq} instance
+#' @keywords datasets
+"msaas"

@@ -73,6 +73,8 @@ NULL
 #' \code{\link[RNAmodR:EndSequenceData-class]{End5SequenceData}}}
 #' }
 #' 
+#' @return a \code{ModAlkAnilineSeq} or \code{ModSetAlkAnilineSeq} object
+#' 
 #' @references 
 #' - Marchand V, Ayadi L, __Ernst FGM__, Hertler J, Bourguignon-Igel V,
 #' Galvanin A, Kotter A, Helm M, __Lafontaine DLJ__, Motorin Y (2018): 
@@ -80,6 +82,25 @@ NULL
 #' Nucleotide Resolution." Angewandte Chemie (International ed. in English) 57 
 #' (51), P. 16785–16790. DOI: 
 #' \href{https://doi.org/10.1002/anie.201810946}{10.1002/anie.201810946}.
+#' 
+#' @examples
+#' library(RNAmodR.Data)
+#' library(rtracklayer)
+#' annotation <- GFF3File(RNAmodR.Data.example.AAS.gff3())
+#' sequences <- RNAmodR.Data.example.AAS.fasta()
+#' files <- list("wt" = c(treated = RNAmodR.Data.example.wt.1(),
+#'                        treated = RNAmodR.Data.example.wt.2(),
+#'                        treated = RNAmodR.Data.example.wt.3()),
+#'               "Bud23del" = c(treated = RNAmodR.Data.example.bud23.1(),
+#'                              treated = RNAmodR.Data.example.bud23.2()),
+#'               "Trm8del" = c(treated = RNAmodR.Data.example.trm8.1(),
+#'                             treated = RNAmodR.Data.example.trm8.2()))
+#' # Creating a Modifier object of type ModRiboMethSeq
+#' maas <- ModAlkAnilineSeq(files[[1]], annotation = annotation,
+#'                          sequences = sequences)
+#' # Creating a ModifierSet object of type ModSetRiboMethSeq
+#' msaas <- ModSetAlkAnilineSeq(files, annotation = annotation,
+#'                              sequences = sequences)
 NULL
 
 #' @rdname ModAlkAnilineSeq
@@ -118,7 +139,6 @@ ModAlkAnilineSeq <- function(x, annotation = NA, sequences = NA, seqinfo = NA,
 #' \code{\link[RNAmodR:ModifierSet-class]{ModifierSet}} object. For more
 #' details see also the man pages for the functions mentioned below.
 #' @param value See \code{\link[RNAmodR:Modifier-class]{settings}}
-#' @param force See \code{\link[RNAmodR:aggregate]{aggregate}}
 #' @param coord,name,from,to,type,window.size,... See 
 #' \code{\link[RNAmodR:visualizeData]{visualizeData}}.
 #' 
@@ -130,8 +150,30 @@ ModAlkAnilineSeq <- function(x, annotation = NA, sequences = NA, seqinfo = NA,
 #' \code{c("scoreNC","scoreSR")}}
 #' }
 #' 
+#' @return 
+#' \itemize{
+#' \item{\code{settings}} {See 
+#' \code{\link[RNAmodR:Modifier-functions]{settings}}.}
+#' \item{\code{aggregate}} {See \code{\link[RNAmodR:aggregate]{aggregate}}.}
+#' \item{\code{modify}} {See \code{\link[RNAmodR:modify]{modify}}.}
+#' \item{\code{getDataTrack}} {a list of 
+#' \code{\link[Gviz:DataTrack-class]{DataTrack}} object.}
+#' \item{\code{visualizeData}} {See 
+#' \code{\link[RNAmodR:visualizeDataByCoord]{visualizeDataByCoord}}.}
+#' \item{\code{visualizeDataByCoord}} {See 
+#' \code{\link[RNAmodR:visualizeDataByCoord]{visualizeDataByCoord}}.}
+#' }
+#' 
 #' @importMethodsFrom RNAmodR modify aggregate settings visualizeData 
 #' visualizeDataByCoord
+#' 
+#' @examples 
+#' data(msaas,package="RNAmodR.AlkAnilineSeq")
+#' maas <- msaas[[1]]
+#' settings(maas)
+#' aggregate(maas)
+#' modify(maas)
+#' getDataTrack(maas, "1", mainScore(maas))
 NULL
 
 .norm_aas_args <- function(input){

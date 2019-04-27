@@ -48,8 +48,20 @@ details see also the man pages for the functions mentioned below.}
 
 \item{coord, name, from, to, type, window.size, ...}{See 
 \code{\link[RNAmodR:visualizeData]{visualizeData}}.}
-
-\item{force}{See \code{\link[RNAmodR:aggregate]{aggregate}}}
+}
+\value{
+\itemize{
+\item{\code{settings}} {See 
+\code{\link[RNAmodR:Modifier-functions]{settings}}.}
+\item{\code{aggregate}} {See \code{\link[RNAmodR:aggregate]{aggregate}}.}
+\item{\code{modify}} {See \code{\link[RNAmodR:modify]{modify}}.}
+\item{\code{getDataTrack}} {a list of 
+\code{\link[Gviz:DataTrack-class]{DataTrack}} object.}
+\item{\code{visualizeData}} {See 
+\code{\link[RNAmodR:visualizeDataByCoord]{visualizeDataByCoord}}.}
+\item{\code{visualizeDataByCoord}} {See 
+\code{\link[RNAmodR:visualizeDataByCoord]{visualizeDataByCoord}}.}
+}
 }
 \description{
 All of the functions of \code{\link[RNAmodR:Modifier-class]{Modifier}} and
@@ -64,4 +76,12 @@ classes.
 for the colours of the individual histograms. The names are expected to be 
 \code{c("scoreNC","scoreSR")}}
 }
+}
+\examples{
+data(msaas,package="RNAmodR.AlkAnilineSeq")
+maas <- msaas[[1]]
+settings(maas)
+aggregate(maas)
+modify(maas)
+getDataTrack(maas, "1", mainScore(maas))
 }

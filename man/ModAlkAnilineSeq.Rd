@@ -55,6 +55,9 @@ positions, if at least one minimal values is exceeded (default:
 \code{\link[RNAmodR:EndSequenceData-class]{End5SequenceData}}}
 }}
 }
+\value{
+a \code{ModAlkAnilineSeq} or \code{ModSetAlkAnilineSeq} object
+}
 \description{
 7-methyl guanosine (m7G), 3-methyl cytidine (m3C) and Dihydrouridine (D) 
 are commonly found in rRNA and tRNA and can be detected classically by
@@ -84,6 +87,25 @@ expected sequence identity.
 
 Only samples named \code{treated} are used for this analysis. Normalization 
 to untreated samples is currently not used.
+}
+\examples{
+library(RNAmodR.Data)
+library(rtracklayer)
+annotation <- GFF3File(RNAmodR.Data.example.AAS.gff3())
+sequences <- RNAmodR.Data.example.AAS.fasta()
+files <- list("wt" = c(treated = RNAmodR.Data.example.wt.1(),
+                       treated = RNAmodR.Data.example.wt.2(),
+                       treated = RNAmodR.Data.example.wt.3()),
+              "Bud23del" = c(treated = RNAmodR.Data.example.bud23.1(),
+                             treated = RNAmodR.Data.example.bud23.2()),
+              "Trm8del" = c(treated = RNAmodR.Data.example.trm8.1(),
+                            treated = RNAmodR.Data.example.trm8.2()))
+# Creating a Modifier object of type ModRiboMethSeq
+maas <- ModAlkAnilineSeq(files[[1]], annotation = annotation,
+                         sequences = sequences)
+# Creating a ModifierSet object of type ModSetRiboMethSeq
+msaas <- ModSetAlkAnilineSeq(files, annotation = annotation,
+                             sequences = sequences)
 }
 \references{
 - Marchand V, Ayadi L, __Ernst FGM__, Hertler J, Bourguignon-Igel V,
