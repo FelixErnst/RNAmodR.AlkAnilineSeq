@@ -1,6 +1,6 @@
 Package: RNAmodR.AlkAnilineSeq
 Title: RNAmodR.AlkAnilineSeq: detection of m7G, m3C and D modification by AlkAnilineSeq
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: c(person("Felix G.M.", 
                     "Ernst", 
                     email = "felix.gm.ernst@outlook.com", 
@@ -33,6 +33,7 @@ Suggests:
     rmarkdown,
     testthat,
     rtracklayer,
+    Biostrings,
     RNAmodR.Data
 Collate: 
     'RNAmodR.AlkAnilineSeq.R'
