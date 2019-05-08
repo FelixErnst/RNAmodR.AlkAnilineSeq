@@ -7,7 +7,7 @@ test_that("AlkAnilineSeq:",{
   expect_type(actual,"list")
   expect_named(actual,c("minCoverage",
                         "minReplicate",
-                        "findMod",
+                        "find.mod",
                         "minLength",
                         "minSignal",
                         "minScoreNC",

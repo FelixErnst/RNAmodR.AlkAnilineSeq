@@ -58,9 +58,9 @@ details see also the man pages for the functions mentioned below.}
 \item{\code{getDataTrack}} {a list of 
 \code{\link[Gviz:DataTrack-class]{DataTrack}} object.}
 \item{\code{visualizeData}} {See 
-\code{\link[RNAmodR:visualizeDataByCoord]{visualizeDataByCoord}}.}
+\code{\link[RNAmodR:visualizeData]{visualizeDataByCoord}}.}
 \item{\code{visualizeDataByCoord}} {See 
-\code{\link[RNAmodR:visualizeDataByCoord]{visualizeDataByCoord}}.}
+\code{\link[RNAmodR:visualizeData]{visualizeDataByCoord}}.}
 }
 }
 \description{
