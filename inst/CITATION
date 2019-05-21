@@ -1,0 +1,8 @@
+year <- sub("-.*", "", meta$Date)
+note <- sprintf("R package version %s", meta$Version)
+bibentry(bibtype = "Manual",
+         title = "{RNAmodR.AlkAnilineSeq}: Detection of m7G, m3C and D modification by AlkAnilineSeq",
+         author = c(person("Felix G.M.", "Ernst"),
+                    person("Denis L.J.", "Lafontaine")),
+         year = year,
+         note = note)
