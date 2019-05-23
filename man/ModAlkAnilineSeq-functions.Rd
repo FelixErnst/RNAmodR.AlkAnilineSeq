@@ -7,16 +7,16 @@
 \alias{aggregate}
 \alias{modify}
 \alias{settings}
-\alias{visualizeData}
-\alias{visualizeDataByCoord}
+\alias{plotData}
+\alias{plotDataByCoord}
 \alias{settings<-,ModAlkAnilineSeq-method}
 \alias{aggregateData,ModAlkAnilineSeq-method}
 \alias{findMod,ModAlkAnilineSeq-method}
 \alias{getDataTrack,ModAlkAnilineSeq-method}
-\alias{visualizeDataByCoord,ModAlkAnilineSeq,GRanges-method}
-\alias{visualizeData,ModAlkAnilineSeq-method}
-\alias{visualizeDataByCoord,ModSetAlkAnilineSeq,GRanges-method}
-\alias{visualizeData,ModSetAlkAnilineSeq-method}
+\alias{plotDataByCoord,ModAlkAnilineSeq,GRanges-method}
+\alias{plotData,ModAlkAnilineSeq-method}
+\alias{plotDataByCoord,ModSetAlkAnilineSeq,GRanges-method}
+\alias{plotData,ModSetAlkAnilineSeq-method}
 \title{Functions for ModAlkAnilineSeq}
 \usage{
 \S4method{settings}{ModAlkAnilineSeq}(x) <- value
@@ -27,17 +27,17 @@
 
 \S4method{getDataTrack}{ModAlkAnilineSeq}(x, name, type, ...)
 
-\S4method{visualizeDataByCoord}{ModAlkAnilineSeq,GRanges}(x, coord,
+\S4method{plotDataByCoord}{ModAlkAnilineSeq,GRanges}(x, coord,
   type = c("ends", "scoreNC", "scoreSR"), window.size = 15L, ...)
 
-\S4method{visualizeData}{ModAlkAnilineSeq}(x, name, from = 1L,
-  to = 30L, type = c("ends", "scoreNC", "scoreSR"), ...)
+\S4method{plotData}{ModAlkAnilineSeq}(x, name, from = 1L, to = 30L,
+  type = c("ends", "scoreNC", "scoreSR"), ...)
 
-\S4method{visualizeDataByCoord}{ModSetAlkAnilineSeq,GRanges}(x, coord,
+\S4method{plotDataByCoord}{ModSetAlkAnilineSeq,GRanges}(x, coord,
   type = c("scoreNC", "scoreSR", "ends"), window.size = 15L, ...)
 
-\S4method{visualizeData}{ModSetAlkAnilineSeq}(x, name, from = 1L,
-  to = 30L, type = c("scoreNC", "scoreSR", "ends"), ...)
+\S4method{plotData}{ModSetAlkAnilineSeq}(x, name, from = 1L, to = 30L,
+  type = c("scoreNC", "scoreSR", "ends"), ...)
 }
 \arguments{
 \item{x}{a \code{\link[RNAmodR:Modifier-class]{Modifier}} or a
@@ -47,7 +47,7 @@ details see also the man pages for the functions mentioned below.}
 \item{value}{See \code{\link[RNAmodR:Modifier-class]{settings}}}
 
 \item{coord, name, from, to, type, window.size, ...}{See 
-\code{\link[RNAmodR:visualizeData]{visualizeData}}.}
+\code{\link[RNAmodR:plotData]{plotData}}.}
 }
 \value{
 \itemize{
@@ -57,10 +57,10 @@ details see also the man pages for the functions mentioned below.}
 \item{\code{modify}} {See \code{\link[RNAmodR:modify]{modify}}.}
 \item{\code{getDataTrack}} {a list of 
 \code{\link[Gviz:DataTrack-class]{DataTrack}} object.}
-\item{\code{visualizeData}} {See 
-\code{\link[RNAmodR:visualizeData]{visualizeDataByCoord}}.}
-\item{\code{visualizeDataByCoord}} {See 
-\code{\link[RNAmodR:visualizeData]{visualizeDataByCoord}}.}
+\item{\code{plotData}} {See 
+\code{\link[RNAmodR:plotData]{plotDataByCoord}}.}
+\item{\code{plotDataByCoord}} {See 
+\code{\link[RNAmodR:plotData]{plotDataByCoord}}.}
 }
 }
 \description{
@@ -70,7 +70,7 @@ inherited by the \code{ModAlkAnilineSeq} and \code{ModSetAlkAnilineSeq}
 classes.
 }
 \details{
-\code{ModAlkAnilineSeq} specific arguments for \link{visualizeData}:
+\code{ModAlkAnilineSeq} specific arguments for \link{plotData}:
 \itemize{
 \item{\code{colour} - }{a named character vector of \code{length = 4} 
 for the colours of the individual histograms. The names are expected to be 

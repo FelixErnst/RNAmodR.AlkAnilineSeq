@@ -118,13 +118,13 @@ plotCompareByCoord(msaas, coord[1], score = "scoreSR", alias = alias)
 In addition, the aggregate data along the transcript visualized as well.
 
 ```{r plot3, fig.cap="", fig.asp=1}
-visualizeData(msaas, "1", from = 1550L, to = 1600L)
+plotData(msaas, "1", from = 1550L, to = 1600L)
 ```
 
 This includes raw data as well.
 
 ```{r plot4, fig.cap="", fig.asp=1}
-visualizeData(msaas, "1", from = 1550L, to = 1600L, seqdata = TRUE)
+plotData(msaas, "1", from = 1550L, to = 1600L, seqdata = TRUE)
 ```
 
 # Session info

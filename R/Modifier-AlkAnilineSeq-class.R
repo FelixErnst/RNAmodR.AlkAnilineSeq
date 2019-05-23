@@ -121,7 +121,7 @@ ModAlkAnilineSeq <- function(x, annotation = NA, sequences = NA, seqinfo = NA,
 # settings ---------------------------------------------------------------------
 
 #' @name ModAlkAnilineSeq-functions
-#' @aliases aggregate modify settings visualizeData visualizeDataByCoord
+#' @aliases aggregate modify settings plotData plotDataByCoord
 #' 
 #' @title Functions for ModAlkAnilineSeq
 #' 
@@ -136,10 +136,10 @@ ModAlkAnilineSeq <- function(x, annotation = NA, sequences = NA, seqinfo = NA,
 #' details see also the man pages for the functions mentioned below.
 #' @param value See \code{\link[RNAmodR:Modifier-class]{settings}}
 #' @param coord,name,from,to,type,window.size,... See 
-#' \code{\link[RNAmodR:visualizeData]{visualizeData}}.
+#' \code{\link[RNAmodR:plotData]{plotData}}.
 #' 
 #' @details 
-#' \code{ModAlkAnilineSeq} specific arguments for \link{visualizeData}:
+#' \code{ModAlkAnilineSeq} specific arguments for \link{plotData}:
 #' \itemize{
 #' \item{\code{colour} - }{a named character vector of \code{length = 4} 
 #' for the colours of the individual histograms. The names are expected to be 
@@ -154,14 +154,14 @@ ModAlkAnilineSeq <- function(x, annotation = NA, sequences = NA, seqinfo = NA,
 #' \item{\code{modify}} {See \code{\link[RNAmodR:modify]{modify}}.}
 #' \item{\code{getDataTrack}} {a list of 
 #' \code{\link[Gviz:DataTrack-class]{DataTrack}} object.}
-#' \item{\code{visualizeData}} {See 
-#' \code{\link[RNAmodR:visualizeData]{visualizeDataByCoord}}.}
-#' \item{\code{visualizeDataByCoord}} {See 
-#' \code{\link[RNAmodR:visualizeData]{visualizeDataByCoord}}.}
+#' \item{\code{plotData}} {See 
+#' \code{\link[RNAmodR:plotData]{plotDataByCoord}}.}
+#' \item{\code{plotDataByCoord}} {See 
+#' \code{\link[RNAmodR:plotData]{plotDataByCoord}}.}
 #' }
 #' 
-#' @importMethodsFrom RNAmodR modify aggregate settings visualizeData 
-#' visualizeDataByCoord
+#' @importMethodsFrom RNAmodR modify aggregate settings plotData 
+#' plotDataByCoord
 #' 
 #' @examples 
 #' data(msaas,package="RNAmodR.AlkAnilineSeq")

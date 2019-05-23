@@ -61,7 +61,7 @@ setMethod(
 #' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
-  f = "visualizeDataByCoord",
+  f = "plotDataByCoord",
   signature = signature(x = "ModAlkAnilineSeq",
                         coord = "GRanges"),
   definition = function(x, coord, type = c("ends","scoreNC","scoreSR"),
@@ -77,7 +77,7 @@ setMethod(
 #' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
-  f = "visualizeData",
+  f = "plotData",
   signature = signature(x = "ModAlkAnilineSeq"),
   definition = function(x, name, from, to, type = c("ends","scoreNC","scoreSR"),
                         ...) {
@@ -92,7 +92,7 @@ setMethod(
 #' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
-  f = "visualizeDataByCoord",
+  f = "plotDataByCoord",
   signature = signature(x = "ModSetAlkAnilineSeq",
                         coord = "GRanges"),
   definition = function(x, coord, type = c("scoreNC","scoreSR","ends"),
@@ -108,7 +108,7 @@ setMethod(
 #' @rdname ModAlkAnilineSeq-functions
 #' @export
 setMethod(
-  f = "visualizeData",
+  f = "plotData",
   signature = signature(x = "ModSetAlkAnilineSeq"),
   definition = function(x, name, from, to, type = c("scoreNC","scoreSR","ends"),
                         ...) {
