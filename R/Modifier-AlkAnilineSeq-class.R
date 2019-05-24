@@ -172,6 +172,38 @@ ModAlkAnilineSeq <- function(x, annotation = NA, sequences = NA, seqinfo = NA,
 #' getDataTrack(maas, "1", mainScore(maas))
 NULL
 
+.not_integer_bigger_than_zero <- RNAmodR:::.not_integer_bigger_than_zero
+.not_numeric_bigger_zero <- RNAmodR:::.not_numeric_bigger_zero
+.not_numeric_between_0_1 <- RNAmodR:::.not_numeric_between_0_1
+.not_logical_operator <- RNAmodR:::.not_logical_operator
+
+.ModAlkAnilineSeq_settings <- data.frame(
+  variable = c("minLength",
+               "minSignal",
+               "minScoreNC",
+               "minScoreSR",
+               "minScoreBaseScore",
+               "scoreOperator"),
+  testFUN = c(".not_integer_bigger_than_zero",
+              ".not_integer_bigger_than_zero",
+              ".not_numeric_bigger_zero",
+              ".not_numeric_between_0_1",
+              ".not_numeric_between_0_1",
+              ".not_logical_operator"),
+  errorValue = c(TRUE,
+                 TRUE,
+                 TRUE,
+                 TRUE,
+                 TRUE,
+                 TRUE),
+  errorMessage = c("'minQuality' must be integer with a value higher than 0.",
+                   "'minSignal' must be integer with a value higher than 0.",
+                   "'minScoreNC' must be numeric with a value higher than 0.",
+                   "'minScoreSR' must be numeric with a value between 0 and 1.",
+                   "'minScoreBaseScore' must be numeric with a value between 0 and 1.",
+                   "'scoreOperator' must be either '|' or '&'."),
+  stringsAsFactors = FALSE)
+
 .norm_aas_args <- function(input){
   minLength <- 9L # for all scores
   minSignal <- 10L # for all scores
@@ -179,66 +211,11 @@ NULL
   minScoreSR <- 0.50 # for score stop ratio
   minScoreBaseScore <- 0.9 # for base scoring
   scoreOperator <- "&"
-  if(!is.null(input[["minLength"]])){
-    minLength <- input[["minLength"]]
-    if(!is.integer(minLength) | minLength < 1L){
-      if(!is.na(minLength)){
-        stop("'minQuality' must be integer with a value higher than 0.",
-             call. = FALSE)
-      }
-    }
-  }
-  if(!is.null(input[["minSignal"]])){
-    minSignal <- input[["minSignal"]]
-    if(!is.integer(minSignal) | minSignal < 1L){
-      stop("'minSignal' must be integer with a value higher than 0.",
-           call. = FALSE)
-    }
-  }
-  if(!is.null(input[["minScoreNC"]])){
-    minScoreNC <- input[["minScoreNC"]]
-    if(!is.numeric(minScoreNC) | minScoreNC < 0 ){
-      stop("'minScoreNC' must be numeric with a value higher than 0.",
-           call. = FALSE)
-    }
-  }
-  if(!is.null(input[["minScoreSR"]])){
-    minScoreSR <- input[["minScoreSR"]]
-    if(!is.numeric(minScoreSR) | minScoreSR < 0 | minScoreSR > 1 ){
-      stop("'minScoreSR' must be numeric with a value between 0 and 1.",
-           call. = FALSE)
-    }
-  }
-  if(!is.null(input[["minScoreSR"]])){
-    minScoreSR <- input[["minScoreSR"]]
-    if(!is.numeric(minScoreSR) | minScoreSR < 0 | minScoreSR > 1 ){
-      stop("'minScoreSR' must be numeric with a value between 0 and 1.",
-           call. = FALSE)
-    }
-  }
-  if(!is.null(input[["minScoreBaseScore"]])){
-    minScoreBaseScore <- input[["minScoreBaseScore"]]
-    if(!is.numeric(minScoreBaseScore) | minScoreBaseScore < 0 | 
-       minScoreBaseScore > 1 ){
-      stop("'minScoreBaseScore' must be numeric with a value between 0 and 1.",
-           call. = FALSE)
-    }
-  }
-  if(!is.null(input[["scoreOperator"]])){
-    scoreOperator <- input[["scoreOperator"]]
-    if(!(scoreOperator %in% c("|","&"))){
-      stop("'scoreOperator' must be either '|' or '&'.",
-           call. = FALSE)
-    }
-  }
-  args <- RNAmodR:::.norm_args(input)
-  args <- c(args,
-            list(minLength = minLength,
-                 minSignal = minSignal,
-                 minScoreNC = minScoreNC,
-                 minScoreSR = minScoreSR,
-                 minScoreBaseScore = minScoreBaseScore,
-                 scoreOperator = scoreOperator))
+  args <- RNAmodR:::.norm_settings(input, .ModAlkAnilineSeq_settings, minLength,
+                                   minSignal, minScoreNC, minScoreSR,
+                                   minScoreBaseScore, scoreOperator)
+  args <- c(RNAmodR:::.norm_Modifier_settings(input),
+            args)
   args
 }
 
@@ -249,7 +226,7 @@ setReplaceMethod(f = "settings",
                  definition = function(x, value){
                    x <- callNextMethod()
                    value <- .norm_aas_args(value)
-                   x@arguments[names(value)] <- unname(value)
+                   x@settings[names(value)] <- unname(value)
                    x
                  })
 
