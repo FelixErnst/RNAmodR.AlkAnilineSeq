@@ -64,7 +64,7 @@ As annotation data either a gff file or a `TxDb` object and for sequence data
 a fasta file or a `BSgenome` object can be used. The data is provided as bam 
 files.
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 annotation <- GFF3File(RNAmodR.Data.example.AAS.gff3())
 sequences <- RNAmodR.Data.example.AAS.fasta()
 files <- list("wt" = c(treated = RNAmodR.Data.example.wt.1(),
@@ -99,7 +99,7 @@ As outlined in the `RNAmodR` package we can compare the samples using the
 from the found modifications. In addition we prepare an alias table.
 
 ```{r}
-coord <- mod[[1]][c(1:3,5:7,9,10)]
+coord <- mod[[1]]
 alias <- data.frame(tx_id = c(1,3,5,6,7,8,10,11),
                     name = c("18S rRNA","tF(GAA)B","tG(GCC)B","tT(AGT)B",
                              "tQ(TTG)B","tC(GCA)B","tS(CGA)C","tV(AAC)E1"),
