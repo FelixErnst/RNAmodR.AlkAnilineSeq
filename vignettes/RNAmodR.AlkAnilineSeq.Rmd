@@ -1,6 +1,6 @@
 ---
 title: 'RNAmodR: AlkAnilineSeq'
-author: "Felix G.M. Ernst"
+author: "Felix G.M. Ernst and Denis L.J. Lafontaine"
 date: "`r Sys.Date()`"
 abstract: >
   detection of m7G, m3C and D modification by AlkAnilineSeq
@@ -83,6 +83,7 @@ number of replicates, number of transcripts, etc).
 
 ```{r}
 msaas <- ModSetAlkAnilineSeq(files, annotation = annotation, sequences = sequences)
+msaas
 ```
 
 As expected the m7G1575 is missing from the Bud23del samples.
@@ -124,7 +125,7 @@ plotData(msaas, "1", from = 1550L, to = 1600L)
 This includes raw data as well.
 
 ```{r plot4, fig.cap="", fig.asp=1}
-plotData(msaas, "1", from = 1550L, to = 1600L, seqdata = TRUE)
+plotData(msaas[1:2], "1", from = 1550L, to = 1600L, showSequenceData = TRUE)
 ```
 
 # Session info

@@ -232,9 +232,9 @@ setReplaceMethod(f = "settings",
 
 # functions --------------------------------------------------------------------
 
-.selected_base_score <- function(x,seq){
+.selected_base_score <- function(data,seq){
   seq <- IRanges::CharacterList(strsplit(as.character(seq),""))
-  data <- x@unlistData
+  data <- data@unlistData
   # the order of baseSelect and baseColumns must be compatible
   # "conversion" T to U is performed with this
   baseSelect <- S4Vectors::DataFrame("G" = unlist(seq) == "G",
@@ -258,6 +258,17 @@ setReplaceMethod(f = "settings",
   baseValues
 }
 
+.apply_Np1_offset <- function(x){
+  offsetAdd <- S4Vectors::DataFrame(as.list(rep(0,ncol(x@unlistData))))
+  colnames(offsetAdd) <- colnames(unlist(x))
+  x_rownames <- rownames(x)
+  x <- x[IRanges::IntegerList(Map(seq.int,2L,lengths(x)))]
+  x_offsetAdd <- IRanges::SplitDataFrameList(rep(list(offsetAdd),length(x)))
+  x <- rbind(x,x_offsetAdd)
+  rownames(x) <- x_rownames
+  x
+}
+
 .aggregate_aas <- function(x){
   mod <- aggregate(sequenceData(x), condition = "Treated")
   if(is.null(names(mod))){
@@ -265,27 +276,21 @@ setReplaceMethod(f = "settings",
   }
   # get the NormEnd5SequenceData
   # shift each result one position upstream, since the signal has an N+1 offset
-  endData <- mod[["NormEnd5SequenceData"]]
-  offsetAdd <- S4Vectors::DataFrame(as.list(rep(0,ncol(endData@unlistData))))
-  colnames(offsetAdd) <- colnames(endData@unlistData)
-  endData <- IRanges::SplitDataFrameList(lapply(endData,
-                                                function(m){
-                                                  m <- m[seq.int(2L,nrow(m)),]
-                                                  rbind(m,offsetAdd)
-                                                }))
+  endData <- .apply_Np1_offset(mod[["NormEnd5SequenceData"]])
   # get the PileupSequenceData
   # calculate base score
   pileupData <- mod[["PileupSequenceData"]]
   score <- .selected_base_score(pileupData,sequences(x))
   # subset to columns needed
-  data <- endData@unlistData[,c("means.treated.ends",
-                                "means.treated.tx",
-                                "means.treated.ol")]
-  colnames(data) <- c("ends","scoreNC","scoreSR")
+  partitioning <- IRanges::PartitioningByEnd(endData)
+  endData <- unlist(endData)[,c("means.treated.ends",
+                             "means.treated.tx",
+                             "means.treated.ol")]
+  colnames(endData) <- c("ends","scoreNC","scoreSR")
   # add base score
-  data$baseScore <- score
+  endData$baseScore <- score
   # split and return
-  ans <- relist(data, endData@partitioning)
+  ans <- relist(endData, partitioning)
   rownames(ans) <- IRanges::CharacterList(RNAmodR:::.seqs_rl_strand(ranges(x)))
   ans
 }
@@ -386,8 +391,7 @@ setMethod(
   minScoreBaseScore <- settings(x,"minScoreBaseScore")
   scoreOperator <- settings(x,"scoreOperator")
   # construct logical vector for passing the minSignal threshold
-  signal <- IRanges::LogicalList(unname(mod@unlistData$ends >= minSignal))
-  signal@partitioning <- mod@partitioning
+  signal <- mod[,"ends"] >= minSignal
   # find modifications
   modifications <- .find_aas_modifications_in_data(mod, letters, grl, signal,
                                                    minScoreNC, minScoreSR,
