@@ -1,7 +1,7 @@
 Package: RNAmodR.AlkAnilineSeq
 Type: Package
 Title: Detection of m7G, m3C and D modification by AlkAnilineSeq
-Version: 0.99.9
+Version: 0.99.10
 Date: 2019-06-11
 Authors@R: c(person("Felix G.M.", 
                     "Ernst", 
@@ -14,7 +14,7 @@ Authors@R: c(person("Felix G.M.",
 Description: RNAmodR.AlkAnilineSeq implements the detection of m7G, m3C and D 
     modifications on RNA from experimental data generated with the 
     AlkAnilineSeq protocol. The package builds on the core functionality of the 
-    RNAmodR package to detect specific patterns for the modifications in high 
+    RNAmodR package to detect specific patterns of the modifications in high 
     throughput sequencing data.
 biocViews: 
     Software, WorkflowStep, Visualization, Sequencing
