@@ -64,7 +64,7 @@ As annotation data either a gff file or a `TxDb` object and for sequence data
 a fasta file or a `BSgenome` object can be used. The data is provided as bam 
 files.
 
-```{r, include=FALSE}
+```{r, message=FALSE, results='hide'}
 annotation <- GFF3File(RNAmodR.Data.example.AAS.gff3())
 sequences <- RNAmodR.Data.example.AAS.fasta()
 files <- list("wt" = c(treated = RNAmodR.Data.example.wt.1(),
