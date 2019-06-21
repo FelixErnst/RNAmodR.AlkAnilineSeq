@@ -118,13 +118,13 @@ plotCompareByCoord(msaas, coord[1], score = "scoreSR", alias = alias)
 
 In addition, the aggregate data along the transcript visualized as well.
 
-```{r plot3, fig.cap="", fig.asp=1}
+```{r plot3, fig.cap="Stop ratio scores for detected m7G1575 on the 18S rRNA plotted as bar plots along the sequence.", fig.asp=1}
 plotData(msaas, "1", from = 1550L, to = 1600L)
 ```
 
 This includes raw data as well.
 
-```{r plot4, fig.cap="", fig.asp=1}
+```{r plot4, fig.cap="Stop ratio scores for detected m7G1575 on the 18S rRNA plotted as bar plots along the sequence. The raw sequence data is shown by setting `showSequenceData = TRUE.", fig.asp=1}
 plotData(msaas[1:2], "1", from = 1550L, to = 1600L, showSequenceData = TRUE)
 ```
 
