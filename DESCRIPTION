@@ -1,8 +1,8 @@
 Package: RNAmodR.AlkAnilineSeq
 Type: Package
 Title: Detection of m7G, m3C and D modification by AlkAnilineSeq
-Version: 0.99.13
-Date: 2019-06-11
+Version: 0.99.14
+Date: 2019-09-27
 Authors@R: c(person("Felix G.M.", 
                     "Ernst", 
                     email = "felix.gm.ernst@outlook.com", 
