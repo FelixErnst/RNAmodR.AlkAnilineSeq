@@ -102,7 +102,7 @@ NULL
 #' @rdname ModAlkAnilineSeq
 #' @export
 setClass("ModAlkAnilineSeq",
-         contains = c("Modifier"),
+         contains = c("RNAModifier"),
          prototype = list(mod = c("m7G","m3C","D"),
                           score = "scoreNC",
                           dataType = c("NormEnd5SequenceData",
