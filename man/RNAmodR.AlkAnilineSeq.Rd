@@ -3,7 +3,6 @@
 \docType{package}
 \name{RNAmodR.AlkAnilineSeq}
 \alias{RNAmodR.AlkAnilineSeq}
-\alias{RNAmodR.AlkAnilineSeq-package}
 \title{RNAmodR.AlkAnilineSeq}
 \description{
 `RNAmodR.AlkAnilineSeq` implements the detection of 7-methyl guanosine,

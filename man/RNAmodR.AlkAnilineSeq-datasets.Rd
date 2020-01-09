@@ -7,7 +7,7 @@
 \title{Example data in the RNAmodR.AlkAnilineSeq package}
 \format{a \code{ModSetAlkAnilineSeq} instance}
 \usage{
-msrms
+data(msaas)
 }
 \description{
 This contains an example ModifierSet object of type ModSetAlkAnilineSeq

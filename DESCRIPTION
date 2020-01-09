@@ -1,8 +1,8 @@
 Package: RNAmodR.AlkAnilineSeq
 Type: Package
 Title: Detection of m7G, m3C and D modification by AlkAnilineSeq
-Version: 1.1.0
-Date: 2019-09-27
+Version: 1.1.1
+Date: 2020-01-09
 Authors@R: c(person("Felix G.M.", 
                     "Ernst", 
                     email = "felix.gm.ernst@outlook.com", 
@@ -45,6 +45,6 @@ Collate:
     'Modifier-AlkAnilineSeq-class.R'
     'Modifier-AlkAnilineSeq-viz.R'
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 BugReports: https://github.com/FelixErnst/RNAmodR.AlkAnilineSeq/issues
 URL: https://github.com/FelixErnst/RNAmodR.AlkAnilineSeq
