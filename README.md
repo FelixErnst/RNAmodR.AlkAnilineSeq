@@ -1,4 +1,4 @@
-# RNAmodR.AlkAnilineSeq
+# RNAmodR.AlkAnilineSeq [![Build Status](https://travis-ci.com/FelixErnst/RNAmodR.AlkAnilineSeq.svg?branch=master)](https://travis-ci.com/FelixErnst/RNAmodR.AlkAnilineSeq) [![codecov](https://codecov.io/gh/FelixErnst/RNAmodR.AlkAnilineSeq/branch/master/graph/badge.svg)](https://codecov.io/gh/FelixErnst/RNAmodR.AlkAnilineSeq)
 
 `RNAmodR.AlkAnilineSeq` uses classes and workflows from `RNAmodR` to detect 
 `m7G`, `m3C` and `D` in RNASeq data specifically treated according to the 
