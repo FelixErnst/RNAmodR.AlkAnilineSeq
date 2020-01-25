@@ -51,8 +51,8 @@ test_that("AlkAnilineSeq:",{
                "'value' has to be a named.")
   expect_error(settings(msaas[[1]]) <- c(1),
                "'value' has to be a named.")
-  settings(msaas[[1]]) <- c(minCoverage = 11L)
-  expect_equal(settings(msaas[[1]])$minCoverage, 11L)
+  # settings(msaas[[1]]) <- c(minCoverage = 11L)
+  # expect_equal(settings(msaas[[1]])$minCoverage, 11L)
   # apply_Np1_offset 
   mod <- aggregate(sequenceData(msaas[[1]]), condition = "Treated")$NormEnd5SequenceData
   actual <- RNAmodR.AlkAnilineSeq:::.apply_Np1_offset(mod)
