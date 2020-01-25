@@ -11,26 +11,12 @@ specific analysis of AlkAnilineSeq data. Have a look at the vignette from the
 # Installation
 
 The current version of the RNAmodR.AlkAnilineSeq package is available from
-GitHub or the Bioconductor devel version.
-
-## Github
-
-```
-remotes::install_github("FelixErnst/RNAmodR.Data")
-remotes::install_github("FelixErnst/RNAmodR")
-remotes::install_github("FelixErnst/RNAmodR.AlkAnilineSeq")
-#
-library(RNAmodR.AlkAnilineSeq)
-```
-
-## Bioconductor
+Bioconductor.
 
 ```
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-# The following initializes usage of Bioc devel
-BiocManager::install(version='devel')
 BiocManager::install("RNAmodR.AlkAnilineSeq")
 library(RNAmodR.AlkAnilineSeq)
 ```

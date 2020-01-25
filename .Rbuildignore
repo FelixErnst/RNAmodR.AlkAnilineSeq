@@ -1,3 +1,4 @@
 ^RNAmodR\.Rproj$
 ^\.Rproj\.user$
 .Rproj
+.travis.yml
