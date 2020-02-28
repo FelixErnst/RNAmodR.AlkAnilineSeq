@@ -43,7 +43,7 @@ setMethod(
       args[["type"]],
       function(t){
         dt <- Gviz::DataTrack(range = data[,t],
-                              groups = t,
+                              groups = factor(t),
                               name = RNAMODR_AAS_PLOT_DATA_NAMES[t],
                               col = args[["colour"]][t],
                               type = "histogram")
