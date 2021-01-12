@@ -222,13 +222,15 @@ NULL
 #' @rdname ModAlkAnilineSeq-functions
 #' @export
 setReplaceMethod(f = "settings", 
-                 signature = signature(x = "ModAlkAnilineSeq"),
-                 definition = function(x, value){
-                   x <- callNextMethod()
-                   value <- .norm_aas_args(value)
-                   x@settings[names(value)] <- unname(value)
-                   x
-                 })
+    signature = signature(x = "ModAlkAnilineSeq"),
+    definition = function(x, value){
+        x <- callNextMethod()
+        names <- names(value)
+        value <- .norm_aas_args(value)
+        x <- RNAmodR:::.add_settings_value(x, value, names)
+        x
+    }
+)
 
 # functions --------------------------------------------------------------------
 

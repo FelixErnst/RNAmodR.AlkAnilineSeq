@@ -1,2 +1,5 @@
 Changes in version 0.99.0 (2019-04-29)
 + Submitted to Bioconductor
+
+Changes in version 1.5.1 (2021-01-12)
++ bugfix for settings function

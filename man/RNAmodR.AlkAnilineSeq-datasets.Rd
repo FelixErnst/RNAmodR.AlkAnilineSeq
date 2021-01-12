@@ -5,7 +5,9 @@
 \alias{RNAmodR.AlkAnilineSeq-datasets}
 \alias{msaas}
 \title{Example data in the RNAmodR.AlkAnilineSeq package}
-\format{a \code{ModSetAlkAnilineSeq} instance}
+\format{
+a \code{ModSetAlkAnilineSeq} instance
+}
 \usage{
 data(msaas)
 }
